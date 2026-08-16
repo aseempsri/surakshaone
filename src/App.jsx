@@ -245,6 +245,26 @@ function setupInteractions(root) {
 
   const progressBar = q('#scrollProgress')
   const header = q('header')
+
+  // The mobile header is position:fixed, so its height has to be mirrored as
+  // padding on the page. Measure it instead of hardcoding, since the logo and
+  // webfont settle after first paint.
+  if (header) {
+    const syncHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        '--nav-h',
+        `${Math.round(header.getBoundingClientRect().height)}px`,
+      )
+    }
+    syncHeaderHeight()
+    if ('ResizeObserver' in window) {
+      const headerObserver = new ResizeObserver(syncHeaderHeight)
+      headerObserver.observe(header)
+      observers.push(headerObserver)
+    }
+    addListener(window, 'orientationchange', syncHeaderHeight, undefined, cleanups)
+  }
+
   const updateScrollEffects = () => {
     if (progressBar) {
       const html = document.documentElement
@@ -522,7 +542,24 @@ function App() {
       <style dangerouslySetInnerHTML={{ __html: page.styles }} />
       <style>{`
         html,body,#root,#page{max-width:100%;}
-        body{overflow-x:hidden;}
+        /* clip (not hidden) keeps the viewport as the scroll container,
+           so the sticky header and scroll position stay stable */
+        html,body{overflow-x:hidden;overflow-x:clip;}
+        /* the sticky header must not change height while scrolling,
+           otherwise every toggle reflows the page below it */
+        header.scrolled .navbar{padding-top:13px;padding-bottom:13px;}
+        /* the rings spin, and a rotating square's bounding box grows to ~1.41x,
+           which periodically stretched the page and yanked the scroll position */
+        .orbit,.ring,.ticker-band{overflow-anchor:none;}
+        @media (max-width:960px){
+          .orbit{overflow:clip;}
+          /* fixed rather than sticky: iOS Safari drops sticky when an
+             ancestor clips overflow, which is what pins the page width */
+          header{position:fixed;top:0;left:0;right:0;width:100%;}
+          body{padding-top:var(--nav-h,67px);}
+          html{scroll-padding-top:calc(var(--nav-h,67px) + 12px);}
+          .nav-links{top:var(--nav-h,67px);max-height:calc(100dvh - var(--nav-h,67px));}
+        }
         .brand img,.fbrand img{
           height:40px;
           width:auto;
