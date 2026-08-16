@@ -552,7 +552,10 @@ function App() {
            which periodically stretched the page and yanked the scroll position */
         .orbit,.ring,.ticker-band{overflow-anchor:none;}
         @media (max-width:960px){
-          .orbit{overflow:clip;}
+          /* leave orbit unclipped so Wellness / LifeSecure labels can sit
+             above and below the nodes; page-level overflow-x:clip still
+             absorbs the spinning-ring bounding-box growth */
+          .orbit{overflow:visible;margin:28px auto 34px;}
           /* fixed rather than sticky: iOS Safari drops sticky when an
              ancestor clips overflow, which is what pins the page width */
           header{position:fixed;top:0;left:0;right:0;width:100%;}
