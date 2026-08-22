@@ -536,17 +536,9 @@
 </header>
 <main id="top">
 
-  <section class="subhero">
-    <div class="wrap">
-      <span class="eyebrow">Protection</span>
-      <h1>Five protections, one membership.</h1>
-      <p class="lead">Every plan includes all five. You don't pick and choose — the point is that the gaps are closed.</p>
-    </div>
-  </section>
-
 <section id="modules">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head center reveal">
       <span class="eyebrow">What's covered</span>
       <h2>Five protections, one membership</h2>
       <p>Every plan includes all five. You don't pick and choose — the point is that the gaps are closed.</p>
@@ -608,6 +600,7 @@
       </div>
       <div class="rep">
         <div class="rep-h"><span class="t">Identity exposure report</span><span class="s">4 exposures</span>
+        </div>
         <div class="rep-r"><span class="k">PAN number</span><span class="v ex">Exposed</span></div>
         <div class="rep-r"><span class="k">Registered address</span><span class="v ex">Exposed</span></div>
         <div class="rep-r"><span class="k">Email password</span><span class="v ex">Exposed</span></div>
@@ -634,6 +627,7 @@
         <div class="bub in"><span class="who">Forwarded message</span>Your electricity connection will be disconnected tonight at 9:30. Update your meter details immediately on this link or call 98XXXXXX21.</div>
         <div class="bub out"><span class="who">SurakshaOne</span>This is a known scam pattern. Electricity boards never send disconnection notices by SMS with a payment link, and they don't use personal mobile numbers.</div>
         <div class="verdict"><b>Verdict: scam.</b> Don't call the number or open the link. If you already did, tell us now — the next steps depend on what you shared and how long ago.</div>
+      </div>
     </div>
 
     <div class="dd-row reveal" id="d-parent">
@@ -650,6 +644,7 @@
       </div>
       <div class="card-w">
         <div class="ready-h"><span class="l">Parents · this month</span>
+        </div>
         <div class="crow" style="border-top:none"><span class="c done">✓</span><div><div class="l2">Doctor call completed</div><div class="d2">Consultation for recurring knee pain · 6 days ago</div></div></div>
         <div class="crow"><span class="c todo">!</span><div><div class="l2">Scam check requested</div><div class="d2">Call claiming to be from the pension office — flagged as fraudulent, no money sent</div></div></div>
         <div class="crow"><span class="c done">✓</span><div><div class="l2">Medicines delivered</div><div class="d2">Monthly BP prescription · arrived on schedule</div></div></div>
@@ -675,6 +670,7 @@
       </div>
       <div class="card-w">
         <div class="ready-h"><span class="l">Doctor on call</span><span class="ready-s" style="color:var(--teal-deep);font-size:26px">4 min<span style="font-size:13px"> wait</span></span>
+        </div>
         <div class="bar"><i style="width:88%"></i></div>
         <div class="crow" style="border-top:none"><span class="c done">✓</span><div><div class="l2">General physician</div><div class="d2">Available now · voice or video</div></div></div>
         <div class="crow"><span class="c done">✓</span><div><div class="l2">Mental health counsellor</div><div class="d2">Next slot today, 6:30 pm</div></div></div>
@@ -699,6 +695,7 @@
       </div>
       <div class="card-w">
         <div class="ready-h"><span class="l">Household readiness</span><span class="ready-s">6<span>/10</span></span>
+        </div>
         <div class="bar"><i style="width:60%"></i></div>
         <div class="crow" style="border-top:none"><span class="c done">✓</span><div><div class="l2">Savings goals set</div><div class="d2">3 active goals being tracked</div></div></div>
         <div class="crow"><span class="c done">✓</span><div><div class="l2">Key documents stored</div><div class="d2">PAN, property papers, account list</div></div></div>
@@ -715,7 +712,7 @@
         <p>From a delayed bag in Delhi to a hospital admission abroad, TravelShield coordinates the response rather than leaving you to arrange it in a country where you don't speak the language and don't know who to call.</p>
       </div>
       <div class="tcats">
-        <div class="tcat"><div class="cn">Emergency &amp; medical
+        <div class="tcat"><div class="cn">Emergency &amp; medical</div>
           <div class="sv">Emergency medical assistance</div><div class="ds">Coordination of hospitalisation, evacuation and treatment support.</div>
           <div class="sv">Repatriation assistance</div><div class="ds">Arrangement of repatriation in medical emergencies.</div></div>
         <div class="tcat"><div class="cn">Baggage &amp; flights</div>
@@ -729,8 +726,6 @@
 
   </div>
 </div>
-
-
 
   <section style="padding-top:20px;padding-bottom:100px">
     <div class="wrap" style="text-align:center">

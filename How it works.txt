@@ -118,10 +118,17 @@
   .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
   @media (max-width:900px){.g4{grid-template-columns:1fr 1fr}}
   @media (max-width:520px){.g4{grid-template-columns:1fr}}
-  .wcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 20px}
-  .wcard .n{font-family:'Inter';font-size:12px;color:var(--teal-deep);font-weight:700;margin-bottom:12px;display:block}
+  .wcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px 22px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .wcard .mic{margin-left:auto;margin-right:auto;margin-bottom:16px}
+  .wcard .n{font-family:'Inter';font-size:12px;color:var(--teal-deep);font-weight:700;margin-bottom:10px;display:block;letter-spacing:.04em;text-transform:uppercase}
   .wcard h4{font-size:16px;font-weight:600;margin-bottom:8px}
-  .wcard p{font-size:13.5px;color:var(--ink-soft);margin:0}
+  .wcard p{font-size:13.5px;color:var(--ink-soft);margin:0;max-width:220px}
+  .steps-head{max-width:none;margin-left:auto;margin-right:auto;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .steps-head .eyebrow{justify-content:center}
+  .i-step1{background:#eaf0ff}.i-step1 svg{stroke:var(--teal-deep)}
+  .i-step2{background:#E7ECFB}.i-step2 svg{stroke:var(--blue)}
+  .i-step3{background:#FCEEE9}.i-step3 svg{stroke:var(--coral)}
+  .i-step4{background:#E8F7F2}.i-step4 svg{stroke:#0F8A6A}
 
   /* MODULES */
   .mods{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -419,7 +426,7 @@
 
   /* ---------- MODULE ICON MICRO-INTERACTION ---------- */
   .mic{ transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease; }
-  .mcard:hover .mic{ transform:rotate(-8deg) scale(1.1); }
+  .mcard:hover .mic, .wcard:hover .mic{ transform:rotate(-8deg) scale(1.1); }
   .mcard{ transition:transform .25s cubic-bezier(.22,.9,.3,1.1), box-shadow .25s ease, border-color .25s ease; }
   .mcard:hover{ border-color:rgba(0,176,214,.35); }
   .mcard li{ transition:transform .18s ease, color .18s ease; }
@@ -536,25 +543,30 @@
 </header>
 <main id="top">
 
-  <section class="subhero">
-    <div class="wrap">
-      <span class="eyebrow">Getting started</span>
-      <h1>From sign-up to protected, without the wait.</h1>
-      <p class="lead">No waiting period, no paperwork stack, no "activates in 30 days" fine print. Here's exactly what happens at each step — and what the first time using each protection actually looks like.</p>
-    </div>
-  </section>
-
   <section>
     <div class="wrap">
-      <div class="sec-head reveal">
+      <div class="sec-head steps-head reveal">
         <span class="eyebrow">The short version</span>
         <h2>Four steps, about ten minutes</h2>
       </div>
       <div class="g4 reveal">
-        <div class="wcard"><span class="n">Step 1</span><h4>Download the app</h4><p>Install SurakshaOne on iOS or Android, then create your account in a couple of minutes.</p></div>
-        <div class="wcard"><span class="n">Step 2</span><h4>Pick your plan</h4><p>Solo, Family, or Family + Parents. All five protections either way — the only thing that changes is who's covered.</p></div>
-        <div class="wcard"><span class="n">Step 3</span><h4>Add your people</h4><p>Spouse, children, parents. Each person gets their own access — parents get their own line, not a shared login.</p></div>
-        <div class="wcard"><span class="n">Step 4</span><h4>Start using services</h4><p>Doctor calls, travel help, scam checks — available from day one, not after an activation window.</p></div>
+        <div class="wcard">
+          <div class="mic i-step1" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M12 7.5v6.2M9.6 11.3 12 13.7l2.4-2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.2h3" stroke-linecap="round"/></svg></div>
+          <span class="n">Step 1</span><h4>Download the app</h4><p>Install SurakshaOne on iOS or Android, then create your account in a couple of minutes.</p>
+        </div>
+        <div class="wcard">
+          <div class="mic i-step2" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M8 4.5h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2z"/><path d="M9.5 9h5M9.5 12.5h5M9.5 16h3.2" stroke-linecap="round"/><circle cx="16.6" cy="7.2" r="2.6" fill="none"/><path d="m15.6 7.2.7.7 1.4-1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="n">Step 2</span><h4>Pick your plan</h4><p>Solo, Family, or Family + Parents. All five protections either way — the only thing that changes is who's covered.</p>
+        </div>
+        <div class="wcard">
+          <div class="mic i-step3" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="9" cy="8" r="2.4"/><circle cx="15.5" cy="8.5" r="2"/><path d="M4.8 17.5c.4-2.4 2.3-3.8 4.2-3.8s3.8 1.4 4.2 3.8" stroke-linecap="round"/><path d="M13.2 17.2c.3-1.8 1.7-2.9 3.2-2.9 1.4 0 2.7 1 3.1 2.6" stroke-linecap="round"/></svg></div>
+          <span class="n">Step 3</span><h4>Add your people</h4><p>Spouse, children, parents. Each person gets their own access — parents get their own line, not a shared login.</p>
+        </div>
+        <div class="wcard">
+          <div class="mic i-step4" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="8.2"/><path d="m10.2 9.2 5.2 2.8-5.2 2.8V9.2z" stroke-linejoin="round"/></svg></div>
+          <span class="n">Step 4</span><h4>Start using services</h4><p>Doctor calls, travel help, scam checks — available from day one, not after an activation window.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -574,6 +586,7 @@
         </div>
         <div class="card-w">
           <div class="ready-h"><span class="l">Get started</span><span class="ready-s" style="color:var(--teal-deep);font-size:24px">~2 min</span>
+          </div>
           <div class="bar"><i style="width:20%"></i></div>
           <div class="crow" style="border-top:none"><span class="c done">✓</span><div><div class="l2">App installed</div><div class="d2">Account created</div></div></div>
           <div class="crow"><span class="c done">✓</span><div><div class="l2">Plan &amp; payment</div><div class="d2">Family + Parents · ₹3,999/yr</div></div></div>
@@ -595,6 +608,7 @@
         </div>
         <div class="card-w">
           <div class="ready-h"><span class="l">Household</span>
+          </div>
           <div class="crow" style="border-top:none"><span class="c done">✓</span><div><div class="l2">You</div><div class="d2">Primary member</div></div></div>
           <div class="crow"><span class="c done">✓</span><div><div class="l2">Spouse</div><div class="d2">Full access added</div></div></div>
           <div class="crow"><span class="c done">✓</span><div><div class="l2">2 children</div><div class="d2">Wellness access added</div></div></div>
@@ -616,6 +630,7 @@
         </div>
         <div class="rep">
           <div class="rep-h"><span class="t">First exposure report</span><span class="s">Generating…</span>
+          </div>
           <div class="rep-r"><span class="k">PAN number</span><span class="v ex">Checking</span></div>
           <div class="rep-r"><span class="k">Registered address</span><span class="v ex">Checking</span></div>
           <div class="rep-r"><span class="k">Email password</span><span class="v ex">Checking</span></div>
@@ -640,6 +655,7 @@
         <div class="phone" aria-hidden="true">
           <div class="pscr">
             <div class="ptop"><span class="hi">Day one</span><span class="dot"></span>
+            </div>
             <div class="pc"><div class="pl">Wellness</div><div class="pv">Doctor on call</div><div class="pm">Available now · 4 min wait</div></div>
             <div class="pc"><div class="pl">CyberSafe</div><div class="pv">Report ready</div><div class="pm">4 exposures found</div></div>
             <div class="pc"><div class="pl">ParentCare</div><div class="pv">2 parents confirmed</div><div class="pm">Line active in Hindi &amp; English</div></div>
@@ -653,7 +669,7 @@
 
   <section>
     <div class="wrap">
-      <div class="sec-head reveal">
+      <div class="sec-head steps-head reveal">
         <span class="eyebrow">Common questions</span>
         <h2>Before you start</h2>
       </div>
@@ -675,6 +691,7 @@
       <div class="fine">No waiting period · Cancel anytime · 100% digital</div>
     </div>
   </section>
+</main>
 <footer>
   <div class="wrap">
     <div class="fgrid">
