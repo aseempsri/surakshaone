@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import homeSource from '../surakhas one index.txt?raw'
 import howSource from '../How it works.txt?raw'
+import protectionSource from '../Protection.txt?raw'
 import employersSource from '../for exployers.txt?raw'
 
 const pages = {
@@ -8,6 +9,8 @@ const pages = {
   '/index.html': homeSource,
   '/how-it-works': howSource,
   '/how-it-works.html': howSource,
+  '/protection': protectionSource,
+  '/protection.html': protectionSource,
   '/employers': employersSource,
   '/employers.html': employersSource,
 }
@@ -17,6 +20,8 @@ const LOGO_SRC = `${BASE_URL}logo.png`
 const LOGO_MARK_SRC = `${BASE_URL}logo-mark.png`
 const FAVICON_SRC = `${BASE_URL}fav.png`
 const WHATSAPP_NUMBER = '919235777101'
+const APP_STORE_URL = '' // e.g. https://apps.apple.com/app/idXXXXXXXX
+const PLAY_STORE_URL = '' // e.g. https://play.google.com/store/apps/details?id=...
 
 function stripBase(pathname) {
   const base = BASE_URL.replace(/\/$/, '')
@@ -45,8 +50,14 @@ function normaliseMarkup(markup) {
   return markup
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replaceAll('href="index.html', `href="${BASE_URL}`)
-    .replaceAll('href="how-it-works.html"', `href="${withBase('/how-it-works')}"`)
-    .replaceAll('href="employers.html"', `href="${withBase('/employers')}"`)
+    .replaceAll('href="how-it-works.html', `href="${withBase('/how-it-works')}`)
+    .replaceAll('href="protection.html', `href="${withBase('/protection')}`)
+    .replaceAll('href="employers.html', `href="${withBase('/employers')}`)
+}
+
+function rebaseImageAssets(markup) {
+  const base = BASE_URL.replace(/\/$/, '')
+  return markup.replaceAll('/images/', `${base}/images/`)
 }
 
 function parsePage(source) {
@@ -67,8 +78,10 @@ function parsePage(source) {
     title: parsed.title,
     description:
       parsed.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',
-    styles: [...parsed.querySelectorAll('style')].map((node) => node.textContent).join('\n'),
-    body: normaliseMarkup(parsed.body.innerHTML),
+    styles: rebaseImageAssets(
+      [...parsed.querySelectorAll('style')].map((node) => node.textContent).join('\n'),
+    ),
+    body: rebaseImageAssets(normaliseMarkup(parsed.body.innerHTML)),
   }
 }
 
@@ -204,25 +217,41 @@ function setupInteractions(root) {
     cleanups,
   )
 
-  const getProtectedCta = q('#final .btn-p')
-  if (getProtectedCta) {
-    getProtectedCta.setAttribute(
+  qa('[data-talk="whatsapp"]').forEach((link) => {
+    link.setAttribute(
       'href',
       whatsappUrl(
         [
           'Hi SurakshaOne,',
           '',
-          'I want to Get Protected with SurakshaOne — Six things handled, one subscription (from ₹108/month).',
+          "I'd like to talk about getting protected with SurakshaOne.",
           '',
-          "I'd like to start with my exposure report and know what's already out there.",
-          '',
-          'Please share how I can join. Thank you.',
+          'Please share the next steps. Thank you.',
         ].join('\n'),
       ),
     )
-    getProtectedCta.setAttribute('target', '_blank')
-    getProtectedCta.setAttribute('rel', 'noopener noreferrer')
-  }
+    link.setAttribute('target', '_blank')
+    link.setAttribute('rel', 'noopener noreferrer')
+  })
+
+  qa('[data-store="ios"]').forEach((link) => {
+    if (APP_STORE_URL) {
+      link.setAttribute('href', APP_STORE_URL)
+      link.setAttribute('target', '_blank')
+      link.setAttribute('rel', 'noopener noreferrer')
+    } else {
+      link.setAttribute('href', '#download')
+    }
+  })
+  qa('[data-store="android"]').forEach((link) => {
+    if (PLAY_STORE_URL) {
+      link.setAttribute('href', PLAY_STORE_URL)
+      link.setAttribute('target', '_blank')
+      link.setAttribute('rel', 'noopener noreferrer')
+    } else {
+      link.setAttribute('href', '#download')
+    }
+  })
 
   const reveals = qa('.reveal')
   if ('IntersectionObserver' in window) {
@@ -361,7 +390,7 @@ function setupInteractions(root) {
       'CyberSafe exposure check run · Bengaluru',
       'GP consultation completed · Pune',
       'Suspicious message flagged as scam · Delhi NCR',
-      'Legal document review requested · Mumbai',
+      'Travel assistance request · Mumbai',
       'Parent care line used · Lucknow',
       'Nominee checklist updated · Chennai',
       'Diet chart reviewed · Hyderabad',
@@ -382,14 +411,39 @@ function setupInteractions(root) {
   const quizScore = q('#quizScore')
   const quizScoreLabel = q('#quizScoreLabel')
   const quizMessage = q('#quizMsg')
+  const quizCount = q('#quizCount')
+  const quizVisual = q('#quizVisual')
+  const quizVisualTitle = q('#quizVisualTitle')
+  const quizVisualSub = q('#quizVisualSub')
   let currentStep = 0
   let quizTotal = 0
   let quizTimer
+  let visualTimer
+  const quizMaxScore = Math.max(quizSteps.length * 2, 1)
+
+  const syncQuizVisual = (step) => {
+    if (!step || !quizVisual) return
+    const next = step.getAttribute('data-img')
+    const title = step.getAttribute('data-title') || ''
+    const sub = step.getAttribute('data-sub') || ''
+    if (quizVisualTitle) quizVisualTitle.textContent = title
+    if (quizVisualSub) quizVisualSub.textContent = sub
+    if (next && quizVisual.getAttribute('src') !== next) {
+      quizVisual.classList.add('is-swap')
+      window.clearTimeout(visualTimer)
+      visualTimer = window.setTimeout(() => {
+        quizVisual.setAttribute('src', next)
+        quizVisual.classList.remove('is-swap')
+      }, 180)
+    }
+  }
 
   const showQuizStep = (index) => {
     quizSteps.forEach((step, stepIndex) => step.classList.toggle('active', stepIndex === index))
     progressDots.forEach((dot, dotIndex) => dot.classList.toggle('done', dotIndex <= index))
     quizResult?.classList.remove('active')
+    if (quizCount) quizCount.textContent = `Question ${index + 1} of ${quizSteps.length}`
+    syncQuizVisual(quizSteps[index])
   }
 
   qa('.quiz-opt').forEach((option) => {
@@ -410,25 +464,41 @@ function setupInteractions(root) {
           progressDots.forEach((dot) => dot.classList.add('done'))
           quizSteps.forEach((quizStep) => quizStep.classList.remove('active'))
           quizResult?.classList.add('active')
-          const percent = Math.round((quizTotal / 6) * 100)
+          if (quizCount) quizCount.textContent = 'Your snapshot'
+          if (quizVisualTitle) quizVisualTitle.textContent = 'Checks unlock with a plan'
+          if (quizVisualSub) {
+            quizVisualSub.textContent =
+              'Subscribe to run PAN, Aadhaar, mobile and email checks — and see the details behind your gaps.'
+          }
+          if (quizVisual) {
+            const base = BASE_URL.replace(/\/$/, '')
+            const resolved = `${base}/images/protection-hero.jpg`
+            quizVisual.classList.add('is-swap')
+            window.clearTimeout(visualTimer)
+            visualTimer = window.setTimeout(() => {
+              quizVisual.setAttribute('src', resolved)
+              quizVisual.classList.remove('is-swap')
+            }, 180)
+          }
+          const percent = Math.round((quizTotal / quizMaxScore) * 100)
           if (quizScore) quizScore.textContent = `${percent}%`
           if (percent >= 65) {
             if (quizScoreLabel) quizScoreLabel.textContent = 'High exposure'
             if (quizMessage) {
               quizMessage.textContent =
-                'You and your household have real gaps open right now — mainly around identity monitoring and what your family could find in an emergency.'
+                "Several gaps are open — identity visibility, family readiness, or credit you wouldn't spot alone. A SurakshaOne check is built for exactly this."
             }
           } else if (percent >= 30) {
             if (quizScoreLabel) quizScoreLabel.textContent = 'Partial exposure'
             if (quizMessage) {
               quizMessage.textContent =
-                "You've covered some of the basics, but at least one gap — often the parents' side — is still wide open."
+                "You've covered some basics, but enough unknowns remain that a member check on PAN, mobile or email is worth running."
             }
           } else {
             if (quizScoreLabel) quizScoreLabel.textContent = 'Low exposure'
             if (quizMessage) {
               quizMessage.textContent =
-                "You're ahead of most people here. Worth double-checking your parents are as covered as you are."
+                "You're ahead of most people — still worth a periodic check so parents, loans and old email registrations don't drift."
             }
           }
         }, 260)
@@ -455,6 +525,7 @@ function setupInteractions(root) {
     cleanups.forEach((cleanup) => cleanup())
     observers.forEach((observer) => observer.disconnect())
     window.clearTimeout(quizTimer)
+    window.clearTimeout(visualTimer)
   }
 }
 
@@ -581,7 +652,7 @@ function App() {
           width:100%;
           height:100%;
           object-fit:contain;
-          filter:drop-shadow(0 14px 28px rgba(10,30,63,.22));
+          filter:drop-shadow(0 14px 28px rgba(44,95,221,.22));
         }
       `}</style>
       <div id="page" dangerouslySetInnerHTML={{ __html: page.body }} />
