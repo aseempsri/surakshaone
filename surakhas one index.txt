@@ -110,10 +110,10 @@
     .orbit{max-width:330px}
     .olabel{display:block;font-size:10px;padding:2px 7px;line-height:1.35;z-index:2}
     .olabel:nth-of-type(1){left:50%!important;top:-4%!important;transform:translate(-50%,-100%)!important}
-    .olabel:nth-of-type(2){left:auto!important;right:0!important;top:28%!important;transform:translate(0,-50%)!important}
-    .olabel:nth-of-type(3){left:auto!important;right:0!important;top:78%!important;transform:translate(0,-50%)!important}
-    .olabel:nth-of-type(4){left:0!important;top:78%!important;transform:translate(0,-50%)!important}
-    .olabel:nth-of-type(5){left:0!important;top:28%!important;transform:translate(0,-50%)!important}
+    .olabel:nth-of-type(2){left:auto!important;right:0!important;top:28.7%!important;transform:translate(0,calc(-100% - 10px))!important}
+    .olabel:nth-of-type(3){left:auto!important;right:0!important;top:75.1%!important;transform:translate(0,calc(-100% - 10px))!important}
+    .olabel:nth-of-type(4){left:0!important;top:75.1%!important;transform:translate(0,calc(-100% - 10px))!important}
+    .olabel:nth-of-type(5){left:0!important;top:28.7%!important;transform:translate(0,calc(-100% - 10px))!important}
   }
 
   /* STRIPE */
@@ -123,6 +123,26 @@
   .stripe .k{font-family:'Inter';font-weight:600;font-size:23px}
   .stripe .d{font-size:12.8px;color:#B9C3D6;margin-top:5px;line-height:1.5}
   .stripe .src{display:block;margin-top:4px;font-size:11px;color:#7C8FAB}
+  @media (max-width:720px){
+    .stripe{padding:28px 0 30px}
+    .stripe .wrap{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:0;
+      max-width:520px;
+      margin:0 auto;
+    }
+    .stripe .it{
+      flex:none;
+      text-align:center;
+      padding:22px 14px;
+    }
+    .stripe .it:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.14)}
+    .stripe .it:nth-child(odd){border-right:1px solid rgba(255,255,255,.14)}
+    .stripe .k{font-size:clamp(20px,5.5vw,24px);letter-spacing:-.02em}
+    .stripe .d{font-size:12px;margin-top:6px;max-width:15.5em;margin-left:auto;margin-right:auto}
+    .stripe .src{font-size:10px;margin-top:5px;line-height:1.4}
+  }
 
   /* WHY */
   .why-band{background:var(--paper-2);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
@@ -321,6 +341,51 @@
   table.cmp .cta-row td{padding:22px 14px 28px;border-bottom:none}
   table.cmp .cta-row .btn{min-width:96px;padding:10px 16px;font-size:13.5px}
   table.cmp .cta-row .btn-p{box-shadow:none}
+  .cmp-mobile{display:none}
+  @media (max-width:820px){
+    .cmp-wrap{display:none}
+    .cmp-mobile{display:grid;gap:12px}
+    .cmp-mcard{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:18px 16px 16px;
+      box-shadow:var(--sh-sm);
+    }
+    .cmp-mcard.hl{
+      border-color:rgba(44,95,221,.35);
+      background:linear-gradient(180deg,rgba(44,95,221,.06),#fff 42%);
+    }
+    .cmp-mcard .mtop{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .cmp-mcard .pname{display:block;font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+    .cmp-mcard .pprice{display:block;font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:3px}
+    .cmp-mcard .best-pill{
+      flex-shrink:0;
+      background:var(--blue);
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      padding:4px 10px;
+      border-radius:100px;
+      white-space:nowrap;
+      margin-top:2px;
+    }
+    .cmp-mcard .feats{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:7px}
+    .cmp-mcard .feats li{
+      display:flex;align-items:flex-start;gap:8px;
+      font-size:13.2px;color:var(--ink-soft);line-height:1.4;
+    }
+    .cmp-mcard .feats .yes{
+      width:18px;height:18px;border-radius:50%;
+      background:#E6F7EF;color:#1FAE6C;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;
+    }
+    .cmp-mcard .btn{width:100%;text-align:center;box-sizing:border-box;padding:11px 16px;font-size:13.5px}
+    .cmp-mcard .btn-p{box-shadow:none}
+  }
   .yes{color:var(--teal-deep);font-weight:700}
   .no{color:#c7ccd6}
   .ad{font-size:12px;color:var(--purple);font-weight:600}
@@ -554,8 +619,9 @@
   .quiz-checks .qico{ width:28px; height:28px; border-radius:8px; background:#fff; color:var(--brand-blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid var(--line); }
   .quiz-checks .qico svg{ width:15px; height:15px; }
   .quiz-lock{ font-size:12.5px; color:var(--mute); margin:0 0 16px; }
-  .quiz-result .cta-btns{ display:flex; flex-wrap:wrap; gap:10px; margin-top:auto; }
-  .quiz-restart{ font-size:13px; color:var(--teal-deep); font-weight:600; margin-top:14px; align-self:flex-start; background:none; border:none; padding:0; }
+  .quiz-result .cta-btns{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:auto; }
+  .quiz-result .cta-btns .btn{ width:100%; max-width:280px; text-align:center; box-sizing:border-box; }
+  .quiz-restart{ font-size:13px; color:var(--teal-deep); font-weight:600; margin-top:14px; align-self:center; background:none; border:none; padding:0; }
 
   @media (prefers-reduced-motion:reduce){
     .ring, .ring.r2, .core, .plan.best::after, .ticker-track{ animation:none !important; }
@@ -983,6 +1049,60 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="cmp-mobile" aria-label="Membership comparison">
+        <article class="cmp-mcard hl">
+          <div class="mtop">
+            <div><span class="pname">All-Access</span><span class="pprice">₹108/mo</span></div>
+            <span class="best-pill">Best value</span>
+          </div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>All five protections in one membership</span></li>
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Priority support</span></li>
+          </ul>
+          <a href="#download" class="btn btn-p">Download</a>
+        </article>
+        <article class="cmp-mcard">
+          <div class="mtop"><div><span class="pname">Wellness</span><span class="pprice">₹499/mo</span></div></div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Doctor, diet &amp; mental health</span></li>
+          </ul>
+          <a href="#download" class="btn btn-g">Download</a>
+        </article>
+        <article class="cmp-mcard">
+          <div class="mtop"><div><span class="pname">CyberSafe</span><span class="pprice">₹399/mo</span></div></div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Identity &amp; fraud monitoring</span></li>
+          </ul>
+          <a href="#download" class="btn btn-g">Download</a>
+        </article>
+        <article class="cmp-mcard">
+          <div class="mtop"><div><span class="pname">TravelShield</span><span class="pprice">₹299/mo</span></div></div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Travel assistance</span></li>
+          </ul>
+          <a href="#download" class="btn btn-g">Download</a>
+        </article>
+        <article class="cmp-mcard">
+          <div class="mtop"><div><span class="pname">LifeSecure</span><span class="pprice">₹399/mo</span></div></div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Financial planning tools</span></li>
+          </ul>
+          <a href="#download" class="btn btn-g">Download</a>
+        </article>
+        <article class="cmp-mcard">
+          <div class="mtop"><div><span class="pname">ParentCare</span><span class="pprice">₹449/mo</span></div></div>
+          <ul class="feats">
+            <li><span class="yes">✓</span><span>Year-round services &amp; digital dashboard</span></li>
+            <li><span class="yes">✓</span><span>Parent care line</span></li>
+          </ul>
+          <a href="#download" class="btn btn-g">Download</a>
+        </article>
       </div>
     </div>
   </div>
