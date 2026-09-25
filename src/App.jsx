@@ -182,7 +182,8 @@ function setupInteractions(root, path = '/') {
   const hello = q('#memberHello')
   if (hello) {
     const name = sessionStorage.getItem(AUTH_NAME_KEY) || 'Member'
-    hello.textContent = `Signed in as ${name}`
+    hello.textContent = name
+    hello.title = `Signed in as ${name}`
   }
 
   const navToggle = q('#navToggle')
