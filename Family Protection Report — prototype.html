@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Family Protection Report — prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+
+  --ink:#16233F;
+  --ink-soft:#4A5674;
+  --paper:#FBFAF7;
+  --sheet:#FFFFFF;
+  --rule:#D9D5CB;
+  --rule-soft:#EAE7DF;
+  --gap:#B4302A;
+  --gap-bg:#FBEEEC;
+  --ok:#1F6B4C;
+  --ok-bg:#EBF3EF;
+  --brass:#9A7B1F;
+  --shadow:0 1px 2px rgba(22,35,63,.06), 0 8px 24px rgba(22,35,63,.07);
+
+  --f-ui:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-doc:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8E6DF; --ink-soft:#A3A9BC; --paper:#12151D; --sheet:#1A1E28;
+    --rule:#343A48; --rule-soft:#262B36;
+    --gap:#E4857C; --gap-bg:#2C1B1A; --ok:#7FC3A3; --ok-bg:#16241E;
+    --brass:#D9BC6A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8E6DF; --ink-soft:#A3A9BC; --paper:#12151D; --sheet:#1A1E28;
+  --rule:#343A48; --rule-soft:#262B36;
+  --gap:#E4857C; --gap-bg:#2C1B1A; --ok:#7FC3A3; --ok-bg:#16241E;
+  --brass:#D9BC6A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--f-ui);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- chrome ---------- */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:var(--paper);border-bottom:1px solid var(--rule);
+}
+.topbar-in{max-width:960px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;gap:16px;align-items:baseline}
+.wordmark{font-weight:700;font-size:15px;letter-spacing:-.01em;margin:0}
+.wordmark span{font-weight:400;color:var(--ink-soft)}
+.tabs{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.tab{
+  background:none;border:1px solid transparent;border-radius:3px;
+  padding:6px 12px;font-size:14px;font-weight:500;color:var(--ink-soft);cursor:pointer;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--rule);background:var(--sheet)}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 96px}
+.narrow{max-width:600px}
+.lede{font-family:var(--f-doc);font-size:18px;line-height:1.55;color:var(--ink-soft);margin:0 0 28px;max-width:60ch}
+h2.sec{font-size:22px;font-weight:600;letter-spacing:-.015em;margin:0 0 4px}
+
+/* ---------- journey ---------- */
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.progress-track{flex:1;height:3px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ink);transition:width .25s ease}
+.progress-label{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.screen{display:none}
+.screen.on{display:block}
+.q{margin:0 0 6px;font-size:21px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.q-help{margin:0 0 22px;font-size:14px;color:var(--ink-soft);max-width:52ch}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+.field .opt{font-weight:400;color:var(--ink-soft)}
+input[type=text],input[type=tel],input[type=email],select{
+  width:100%;padding:10px 12px;font:inherit;font-size:15px;
+  background:var(--sheet);color:var(--ink);
+  border:1px solid var(--rule);border-radius:3px;
+}
+input:focus,select:focus{border-color:var(--ink)}
+.hint{font-size:13px;color:var(--ink-soft);margin-top:6px}
+
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{
+  padding:9px 14px;font-size:14px;background:var(--sheet);
+  border:1px solid var(--rule);border-radius:3px;cursor:pointer;text-align:left;
+}
+.choice:hover{border-color:var(--ink-soft)}
+.choice[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.cat{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 13px;
+  background:var(--sheet);border:1px solid var(--rule);border-radius:3px;
+  cursor:pointer;text-align:left;font-size:14px;line-height:1.35;
+}
+.cat[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
+.cat b{display:block;font-weight:500}
+.cat small{color:var(--ink-soft);font-size:12px}
+.tick{
+  width:16px;height:16px;flex:0 0 16px;margin-top:2px;border:1px solid var(--rule);border-radius:2px;
+  display:grid;place-items:center;font-size:11px;color:transparent;
+}
+.cat[aria-pressed="true"] .tick{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+.instrow{display:flex;gap:8px;margin-bottom:8px}
+.instrow input{flex:1}
+.linkbtn{background:none;border:none;color:var(--ink-soft);font-size:13px;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.linkbtn:hover{color:var(--ink)}
+.xbtn{background:none;border:1px solid var(--rule);border-radius:3px;width:38px;cursor:pointer;color:var(--ink-soft)}
+.xbtn:hover{border-color:var(--gap);color:var(--gap)}
+
+.navrow{display:flex;gap:10px;align-items:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--rule-soft)}
+.btn{
+  padding:11px 20px;font-size:15px;font-weight:500;border-radius:3px;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);
+}
+.btn:hover{opacity:.9}
+.btn.ghost{background:transparent;color:var(--ink-soft);border-color:var(--rule)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--ink-soft)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.spacer{flex:1}
+
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.45;padding:14px;background:var(--sheet);border:1px solid var(--rule);border-radius:3px}
+.consent input{margin-top:3px}
+.notice{font-size:13px;line-height:1.5;color:var(--ink-soft);border-left:2px solid var(--rule);padding-left:14px;margin:18px 0}
+
+/* ---------- report ---------- */
+.reportbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:22px}
+.chip{font-size:13px;color:var(--ink-soft);border:1px solid var(--rule);border-radius:99px;padding:4px 11px}
+.sheet{
+  background:var(--sheet);border:1px solid var(--rule);border-radius:3px;
+  box-shadow:var(--shadow);padding:38px 40px;margin-bottom:22px;
+  font-family:var(--f-doc);
+}
+.sheet-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:24px;
+  font-family:var(--f-ui);
+}
+.sheet-head h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.sheet-no{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.sheet p{margin:0 0 14px;font-size:16px;line-height:1.6;max-width:66ch}
+.sheet p:last-child{margin-bottom:0}
+
+.grp{margin-bottom:20px}
+.grp h4{font-family:var(--f-ui);font-size:13px;font-weight:600;margin:0 0 8px;color:var(--ink-soft)}
+.line{
+  display:flex;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule-soft);
+  font-size:16px;
+}
+.line:last-child{border-bottom:none}
+.line .nm{flex:1}
+.line .st{font-family:var(--f-ui);font-size:12px;font-weight:600;padding:3px 9px;border-radius:2px;white-space:nowrap}
+.st.no{background:var(--gap-bg);color:var(--gap)}
+.st.yes{background:var(--ok-bg);color:var(--ok)}
+.st.na{background:var(--rule-soft);color:var(--ink-soft)}
+
+.score{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+.score-n{font-family:var(--f-ui);font-size:96px;font-weight:700;line-height:.85;letter-spacing:-.05em;color:var(--gap);font-variant-numeric:tabular-nums}
+.score-n.clean{color:var(--ok)}
+.score-t{font-size:19px;line-height:1.35;max-width:22ch}
+.flags{list-style:none;margin:26px 0 0;padding:0;counter-reset:f}
+.flags li{
+  counter-increment:f;position:relative;padding:11px 0 11px 34px;
+  border-top:1px solid var(--rule-soft);font-size:16px;line-height:1.45;
+}
+.flags li::before{
+  content:counter(f);position:absolute;left:0;top:12px;
+  font-family:var(--f-ui);font-size:12px;font-weight:600;color:var(--gap);
+  width:20px;height:20px;border:1px solid var(--gap);border-radius:50%;display:grid;place-items:center;
+}
+.bignum{font-family:var(--f-ui);font-size:34px;font-weight:600;letter-spacing:-.025em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.assume{font-size:13px;font-family:var(--f-ui);color:var(--ink-soft);line-height:1.5;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule-soft)}
+.fix{list-style:none;margin:0;padding:0;counter-reset:x}
+.fix li{counter-increment:x;display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+.fix li:last-child{border-bottom:none}
+.fix .n{font-family:var(--f-ui);font-size:13px;font-weight:600;color:var(--ink-soft);width:20px;flex:0 0 20px;padding-top:3px;font-variant-numeric:tabular-nums}
+.fix .body{flex:1}
+.fix .meta{font-family:var(--f-ui);font-size:13px;color:var(--ink-soft);margin-top:3px}
+.tools{list-style:none;margin:0;padding:0}
+.tools li{padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+.tools li:last-child{border-bottom:none}
+.tools b{font-family:var(--f-ui);font-size:15px;font-weight:600;display:block;margin-bottom:2px}
+.tools span{font-size:15px;color:var(--ink-soft)}
+.steps{margin:0;padding-left:20px}
+.steps li{margin-bottom:8px;font-size:16px;line-height:1.5}
+.stamp{
+  font-family:var(--f-ui);font-size:12px;color:var(--brass);
+  border:1px solid var(--brass);border-radius:2px;padding:6px 10px;display:inline-block;margin-top:20px;
+}
+
+/* ---------- plans ---------- */
+.ledger{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:10px}
+.ledger th{
+  text-align:left;font-size:13px;font-weight:600;color:var(--ink-soft);
+  padding:0 12px 9px 0;border-bottom:1px solid var(--rule);
+}
+.ledger td{padding:14px 12px 14px 0;border-bottom:1px solid var(--rule-soft);vertical-align:top;line-height:1.45}
+.ledger tr:last-child td{border-bottom:none}
+.ledger .price{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ledger .plan{font-weight:600}
+.ledger td small{display:block;color:var(--ink-soft);font-size:13px;margin-top:3px;font-weight:400}
+.ledger .free{color:var(--ok)}
+.wrapx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rules{margin:0;padding-left:20px;font-size:15px;line-height:1.6}
+.rules li{margin-bottom:9px;max-width:66ch}
+h3.sub{font-size:16px;font-weight:600;margin:34px 0 10px}
+
+@media (max-width:640px){
+  .wrap{padding:24px 16px 80px}
+  .sheet{padding:26px 22px}
+  .score-n{font-size:72px}
+  .topbar-in{padding:10px 16px}
+  .tabs{margin-left:0;width:100%}
+  .tab{flex:1;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <p class="wordmark">Family Protection Report <span>— working prototype</span></p>
+    <nav class="tabs" role="tablist" aria-label="Prototype sections">
+      <button class="tab" role="tab" aria-selected="true" data-view="journey">Journey</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="report">Report</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="plans">Plans</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ JOURNEY ============ -->
+<main class="wrap narrow" id="view-journey">
+  <div class="progress">
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:8%"></div></div>
+    <span class="progress-label" id="plabel">Step 1 of 12</span>
+  </div>
+  <div id="screens"></div>
+</main>
+
+<!-- ============ REPORT ============ -->
+<main class="wrap" id="view-report" hidden>
+  <div class="reportbar">
+    <h2 class="sec">Report sample</h2>
+    <span class="chip" id="src-chip">Showing sample data</span>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="loadSample">Load sample data</button>
+  </div>
+  <div id="report"></div>
+</main>
+
+<!-- ============ PLANS ============ -->
+<main class="wrap" id="view-plans" hidden>
+  <h2 class="sec">Plans</h2>
+  <p class="lede">The report is free and always will be. It qualifies the lead and tells us which of the paid services actually applies.</p>
+
+  <div class="wrapx">
+  <table class="ledger">
+    <thead><tr><th>Plan</th><th>Price</th><th>Delivered by</th><th>Offered when</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="plan">Family Protection Report<small>12 questions, six-page PDF on WhatsApp</small></td>
+        <td class="price free">Free</td>
+        <td>Automated<small>No human touch</small></td>
+        <td>Everyone<small>Entry point</small></td>
+      </tr>
+      <tr>
+        <td class="plan">Nomination Fix<small>We chase every institution until the gap score is zero</small></td>
+        <td class="price">₹2,500</td>
+        <td>Ops associate<small>~2.5 hours, no credentials taken</small></td>
+        <td>Three or more gaps</td>
+      </tr>
+      <tr>
+        <td class="plan">Adrika Will<small>Lawyer-drafted, unregistered</small></td>
+        <td class="price">₹9,500</td>
+        <td>Adrika Law Firm<small>In-house</small></td>
+        <td>Property, business stake, or minor children</td>
+      </tr>
+      <tr>
+        <td class="plan">Adrika Will, registered<small>Drafted, executed and registered</small></td>
+        <td class="price">₹18,000</td>
+        <td>Adrika + registrar</td>
+        <td>Estate over ₹1 Cr, or a blended family</td>
+      </tr>
+      <tr>
+        <td class="plan">Claim Assist<small>Full settlement across every institution, plus a dormant-asset sweep</small></td>
+        <td class="price">₹25,000<br><small>+10% on recovered dormant assets</small></td>
+        <td>Adrika + ops<small>8 to 16 weeks typical</small></td>
+        <td>A death in a covered household</td>
+      </tr>
+      <tr>
+        <td class="plan">Readiness, white-label<small>The same report under a partner's brand</small></td>
+        <td class="price">₹60<small>per life, per year</small></td>
+        <td>Automated</td>
+        <td>Employers, brokers and insurers</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="sub">How a plan gets offered</h3>
+  <p class="lede" style="font-size:16px;margin-bottom:18px">Nothing is pitched on the report itself. The offer is made afterwards, on a call, and only where the person's own answers show it applies.</p>
+  <div class="wrapx">
+  <table class="ledger">
+    <thead><tr><th>Signal in the answers</th><th>Plan offered</th></tr></thead>
+    <tbody>
+      <tr><td>Gap score of 3 or more</td><td>Nomination Fix</td></tr>
+      <tr><td>Minor children with no guardian named</td><td>Adrika Will</td></tr>
+      <tr><td>Property or a business stake and no will</td><td>Adrika Will</td></tr>
+      <tr><td>Will over five years old, or unsigned</td><td>Adrika Will, as a rewrite</td></tr>
+      <tr><td>Movable assets above ₹1 Cr, or NRI heirs</td><td>Adrika Will, registered</td></tr>
+      <tr><td>Nobody knows where the documents are kept</td><td>Nomination Fix, then the will</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="sub">Pricing rules</h3>
+  <ul class="rules">
+    <li>The report is never discounted, because it is already free. Discounting anything under it destroys the anchor.</li>
+    <li>Claim Assist is quoted flat, never hourly. A bereaved family cannot evaluate an hourly rate and will not engage on one.</li>
+    <li>The 10% success fee applies only to assets the family did not know existed. Charging it on a nominated asset they would have received anyway is a regulatory complaint waiting to happen.</li>
+    <li>White-label is priced low enough that the partner treats it as free. We are buying distribution, not recurring revenue.</li>
+  </ul>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- reference data ---------- */
+var CATS=[
+ {c:"BANK",  n:"Savings / current accounts", s:"Up to 4 nominees", nom:true},
+ {c:"FD",    n:"Fixed / recurring deposits", s:"", nom:true},
+ {c:"DEMAT", n:"Demat / stocks",             s:"Up to 10 nominees", nom:true},
+ {c:"MF",    n:"Mutual funds",               s:"Up to 10 nominees", nom:true},
+ {c:"LIFE",  n:"Life insurance",             s:"", nom:true},
+ {c:"HEALTH",n:"Health insurance",           s:"Nominee for claim proceeds", nom:true},
+ {c:"EPF",   n:"EPF / EPS",                  s:"Via e-nomination", nom:true},
+ {c:"NPS",   n:"NPS",                        s:"", nom:true},
+ {c:"PPF",   n:"PPF / SSY / post office",    s:"", nom:true},
+ {c:"PROP",  n:"Property",                   s:"Will or succession only", nom:false},
+ {c:"GOLD",  n:"Gold, jewellery, locker",    s:"Will only", nom:false},
+ {c:"BIZ",   n:"Business / LLP stake",       s:"Depends on the deed", nom:false},
+ {c:"LOAN",  n:"Loans and liabilities",      s:"These transfer too", nom:false},
+ {c:"CRYPTO",n:"Crypto / digital assets",    s:"Seed phrase access only", nom:false}
+];
+var CATMAP={}; CATS.forEach(function(x){CATMAP[x.c]=x;});
+
+/* institution seed list — names only, for the autocomplete */
+var INST={
+ BANK:["SBI","HDFC Bank","ICICI Bank","Axis Bank","Kotak Mahindra","PNB","Bank of Baroda","Canara Bank","IndusInd","Yes Bank"],
+ FD:["SBI","HDFC Bank","Bajaj Finance","Shriram Finance","Post Office"],
+ DEMAT:["Zerodha","Groww","Upstox","Angel One","ICICI Direct","HDFC Securities","Kotak Securities"],
+ MF:["CAMS","KFintech","Groww","Zerodha Coin","MF Central"],
+ LIFE:["LIC","HDFC Life","ICICI Prudential","SBI Life","Max Life","Bajaj Allianz","Tata AIA"],
+ HEALTH:["Star Health","Niva Bupa","HDFC Ergo","Care Health","ICICI Lombard","Employer group cover"],
+ EPF:["EPFO"],
+ NPS:["NPS via NSDL","NPS via KFintech"],
+ PPF:["SBI","HDFC Bank","India Post"],
+ PROP:["Flat","Plot","Ancestral property","Commercial unit"],
+ GOLD:["Bank locker","Home safe","Digital gold"],
+ BIZ:["Private limited","LLP","Partnership","Proprietorship"],
+ LOAN:["Home loan","Car loan","Personal loan","Credit card"],
+ CRYPTO:["Exchange account","Self-custody wallet"]
+};
+
+/* nomination method library — the real asset */
+var METHOD={
+ BANK:{how:"Net banking, usually instant",t:"10 min"},
+ FD:{how:"Net banking or branch form",t:"15 min"},
+ DEMAT:{how:"Online with Aadhaar e-sign",t:"10 min"},
+ MF:{how:"CAMS or KFintech, online",t:"15 min"},
+ LIFE:{how:"Insurer portal, some need a physical form",t:"20 min"},
+ HEALTH:{how:"Insurer portal",t:"10 min"},
+ EPF:{how:"EPFO member portal, e-nomination",t:"20 min"},
+ NPS:{how:"CRA portal",t:"15 min"},
+ PPF:{how:"Branch form, mostly physical",t:"1 visit"},
+ PROP:{how:"Cannot be nominated — covered by the will",t:"—"},
+ GOLD:{how:"Cannot be nominated — covered by the will",t:"—"},
+ BIZ:{how:"Depends on the constitution documents",t:"—"},
+ LOAN:{how:"No nomination — note it in the will",t:"—"},
+ CRYPTO:{how:"No nomination — seed phrase access only",t:"—"}
+};
+
+var BANDS={"Under ₹5L":250000,"₹5–25L":1500000,"₹25L–1Cr":6250000,"Over ₹1Cr":15000000,"Prefer not to say":0};
+
+/* ---------- state ---------- */
+var S={
+ name:"",mobile:"",email:"",city:"",
+ age:"",marital:"",law:"",deps:[],minors:"",
+ cats:[],holdings:{},
+ will:"",willAge:"",guardian:"",docsKnown:"",joint:"",nri:"",
+ tName:"",tRel:"",tMobile:"",tShare:"",consent:false
+};
+var SAMPLE={
+ name:"Rohit Nair",mobile:"98450 00000",email:"",city:"Bengaluru",
+ age:"42",marital:"Married",law:"Hindu, Sikh, Jain or Buddhist",
+ deps:["Spouse","Children under 18","Parents"],minors:"Yes",
+ cats:["BANK","FD","DEMAT","MF","LIFE","EPF","PPF","PROP","GOLD"],
+ holdings:{
+  BANK:{inst:["HDFC Bank","SBI","ICICI Bank"],count:"2–3",nom:"No",rel:"—",band:"₹5–25L"},
+  FD:{inst:["SBI"],count:"1",nom:"Don't know",rel:"—",band:"₹5–25L"},
+  DEMAT:{inst:["Zerodha"],count:"1",nom:"Yes",rel:"Spouse",band:"₹25L–1Cr"},
+  MF:{inst:["CAMS","KFintech"],count:"4+",nom:"No",rel:"—",band:"₹25L–1Cr"},
+  LIFE:{inst:["LIC","HDFC Life"],count:"2–3",nom:"Yes",rel:"Parent",band:"₹25L–1Cr"},
+  EPF:{inst:["EPFO"],count:"2–3",nom:"No",rel:"—",band:"₹5–25L"},
+  PPF:{inst:["SBI"],count:"1",nom:"Don't know",rel:"—",band:"₹5–25L"},
+  PROP:{inst:["Flat","Ancestral property"],count:"2–3",nom:"—",rel:"—",band:"Over ₹1Cr"},
+  GOLD:{inst:["Bank locker"],count:"1",nom:"—",rel:"—",band:"₹5–25L"}
+ },
+ will:"No",willAge:"",guardian:"No",docsKnown:"No",joint:"Yes",nri:"No",
+ tName:"Meera Nair",tRel:"Spouse",tMobile:"98450 00001",tShare:"Yes",consent:true
+};
+
+/* ---------- helpers ---------- */
+function el(t,a,kids){
+  var e=document.createElement(t);
+  if(a)for(var k in a){ if(k==="html")e.innerHTML=a[k]; else if(k==="text")e.textContent=a[k]; else e.setAttribute(k,a[k]); }
+  (kids||[]).forEach(function(c){ if(c) e.appendChild(c); });
+  return e;
+}
+function inr(n){
+  n=Math.round(n);
+  var s=String(n), last3=s.slice(-3), rest=s.slice(0,-3);
+  if(rest) last3=","+last3;
+  rest=rest.replace(/\B(?=(\d{2})+(?!\d))/g,",");
+  return "₹"+rest+last3;
+}
+
+/* ---------- screen builders ---------- */
+function pick(label,key,opts,help,multi){
+  var f=el("div",{class:"field"});
+  if(label) f.appendChild(el("label",{text:label}));
+  var box=el("div",{class:"choices"});
+  opts.forEach(function(o){
+    var on = multi ? S[key].indexOf(o)>-1 : S[key]===o;
+    var b=el("button",{class:"choice",type:"button","aria-pressed":on?"true":"false",text:o});
+    b.onclick=function(){
+      if(multi){
+        var i=S[key].indexOf(o);
+        if(i>-1)S[key].splice(i,1); else S[key].push(o);
+      } else { S[key]=o; }
+      render();
+    };
+    box.appendChild(b);
+  });
+  f.appendChild(box);
+  if(help) f.appendChild(el("p",{class:"hint",text:help}));
+  return f;
+}
+function text(label,key,ph,type,opt){
+  var f=el("div",{class:"field"});
+  var l=el("label",{});
+  l.appendChild(document.createTextNode(label));
+  if(opt) l.appendChild(el("span",{class:"opt",text:"  optional"}));
+  f.appendChild(l);
+  var i=el("input",{type:type||"text",placeholder:ph||"",value:S[key]||""});
+  i.oninput=function(){ S[key]=i.value; refreshNav(); };
+  f.appendChild(i);
+  return f;
+}
+
+function screenIdentity(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"Let's start with who you are"}));
+  s.appendChild(el("p",{class:"q-help",text:"We send the report to this number on WhatsApp. Your city decides the court-fee rates we use later."}));
+  s.appendChild(text("Full name","name","As it appears on your PAN"));
+  s.appendChild(text("Mobile","mobile","10 digits","tel"));
+  s.appendChild(text("Email","email","","email",true));
+  s.appendChild(text("City","city","Bengaluru"));
+  return s;
+}
+function screenAbout(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"A little about your situation"}));
+  s.appendChild(el("p",{class:"q-help",text:"Succession in India runs on personal law. We ask so the report applies the right one — nothing else."}));
+  s.appendChild(pick("Age","age",["25–34","35–44","45–54","55–64","65+"]));
+  s.appendChild(pick("Marital status","marital",["Single","Married","Widowed","Separated"]));
+  s.appendChild(pick("For succession law purposes","law",["Hindu, Sikh, Jain or Buddhist","Muslim","Christian","Parsi","Other"]));
+  return s;
+}
+function screenDeps(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"Who depends on you financially?"}));
+  s.appendChild(el("p",{class:"q-help",text:"Pick everyone who would feel it if your income stopped tomorrow."}));
+  s.appendChild(pick("","deps",["Spouse","Children under 18","Children 18+","Parents","Siblings","Nobody"],null,true));
+  s.appendChild(pick("Are any of them minors?","minors",["Yes","No"],"If yes, we check whether a guardian is named anywhere."));
+  return s;
+}
+function screenCats(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"Where is your money?"}));
+  s.appendChild(el("p",{class:"q-help",text:"Tick everything you hold. We only need the categories here — names come next, and never account numbers."}));
+  var g=el("div",{class:"cats"});
+  CATS.forEach(function(c){
+    var on=S.cats.indexOf(c.c)>-1;
+    var b=el("button",{class:"cat",type:"button","aria-pressed":on?"true":"false"});
+    b.appendChild(el("span",{class:"tick",text:"✓"}));
+    var w=el("span",{});
+    w.appendChild(el("b",{text:c.n}));
+    if(c.s) w.appendChild(el("small",{text:c.s}));
+    b.appendChild(w);
+    b.onclick=function(){
+      var i=S.cats.indexOf(c.c);
+      if(i>-1){ S.cats.splice(i,1); delete S.holdings[c.c]; }
+      else { S.cats.push(c.c); S.holdings[c.c]={inst:[""],count:"",nom:"",rel:"",band:"Prefer not to say"}; }
+      render();
+    };
+    g.appendChild(b);
+  });
+  s.appendChild(g);
+  return s;
+}
+function screenHolding(code){
+  var c=CATMAP[code], h=S.holdings[code];
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:c.n}));
+  s.appendChild(el("p",{class:"q-help",text:"Which institutions? Names only — never an account, folio or policy number."}));
+
+  var f=el("div",{class:"field"});
+  f.appendChild(el("label",{text:"Institution"}));
+  h.inst.forEach(function(v,i){
+    var row=el("div",{class:"instrow"});
+    var inp=el("input",{type:"text",list:"dl-"+code,value:v,placeholder:(INST[code]&&INST[code][0])||"Name"});
+    inp.oninput=function(){ h.inst[i]=inp.value; refreshNav(); };
+    row.appendChild(inp);
+    if(h.inst.length>1){
+      var x=el("button",{class:"xbtn",type:"button",title:"Remove",text:"×"});
+      x.onclick=function(){ h.inst.splice(i,1); render(); };
+      row.appendChild(x);
+    }
+    f.appendChild(row);
+  });
+  var dl=el("datalist",{id:"dl-"+code});
+  (INST[code]||[]).forEach(function(o){ dl.appendChild(el("option",{value:o})); });
+  f.appendChild(dl);
+  if(h.inst.length<5){
+    var add=el("button",{class:"linkbtn",type:"button",text:"Add another institution"});
+    add.onclick=function(){ h.inst.push(""); render(); };
+    f.appendChild(add);
+  }
+  s.appendChild(f);
+
+  s.appendChild(sub("Roughly how many accounts here?","count",["1","2–3","4+"],h));
+  if(c.nom){
+    s.appendChild(sub("Is a nominee registered?","nom",["Yes","No","Don't know"],h));
+    if(h.nom==="Yes") s.appendChild(sub("Who is the nominee?","rel",["Spouse","Child","Parent","Sibling","Other"],h));
+  } else {
+    s.appendChild(el("p",{class:"notice",text:"Nomination is not available on this. It passes through your will, or through succession law if there isn't one."}));
+  }
+  s.appendChild(sub("Approximate value","band",["Under ₹5L","₹5–25L","₹25L–1Cr","Over ₹1Cr","Prefer not to say"],h));
+  s.appendChild(el("p",{class:"hint",text:"Bands only, never a figure. Skip it and we leave the cost estimate out of your report."}));
+  return s;
+}
+function sub(label,key,opts,h){
+  var f=el("div",{class:"field"});
+  f.appendChild(el("label",{text:label}));
+  var box=el("div",{class:"choices"});
+  opts.forEach(function(o){
+    var b=el("button",{class:"choice",type:"button","aria-pressed":h[key]===o?"true":"false",text:o});
+    b.onclick=function(){ h[key]=o; render(); };
+    box.appendChild(b);
+  });
+  f.appendChild(box);
+  return f;
+}
+function screenLegal(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"Where do you stand legally?"}));
+  s.appendChild(el("p",{class:"q-help",text:"A nominee holds an asset. A will decides who owns it. Most families find out the difference at the worst moment."}));
+  s.appendChild(pick("Do you have a will?","will",["No","Written but unsigned","Signed, not registered","Signed and registered"]));
+  if(S.will==="Signed, not registered"||S.will==="Signed and registered")
+    s.appendChild(pick("When did you last update it?","willAge",["Within 2 years","2–5 years","Over 5 years","Don't remember"]));
+  if(S.minors==="Yes")
+    s.appendChild(pick("Is a guardian named for your children?","guardian",["Yes","No"]));
+  s.appendChild(pick("Does anyone know where your documents are kept?","docsKnown",["Yes","No"]));
+  s.appendChild(pick("Any jointly held assets?","joint",["Yes","No","Not sure"]));
+  s.appendChild(pick("Any heirs living outside India?","nri",["Yes","No"]));
+  return s;
+}
+function screenTrusted(){
+  var s=el("div",{});
+  s.appendChild(el("h2",{class:"q",text:"Who would handle all of this?"}));
+  s.appendChild(el("p",{class:"q-help",text:"One person. They get the last page of your report — the institution list and the first five steps. Nothing else, and only if you say so."}));
+  s.appendChild(text("Their name","tName","Full name"));
+  s.appendChild(pick("Their relationship to you","tRel",["Spouse","Child","Parent","Sibling","Friend","Other"]));
+  s.appendChild(text("Their mobile","tMobile","10 digits","tel"));
+  s.appendChild(pick("Send them the one-page summary?","tShare",["Yes","No"],"We do not contact them unless you say yes."));
+
+  var c=el("div",{class:"consent"});
+  var cb=el("input",{type:"checkbox",id:"consent"});
+  cb.checked=S.consent;
+  cb.onchange=function(){ S.consent=cb.checked; refreshNav(); };
+  c.appendChild(cb);
+  c.appendChild(el("label",{for:"consent",html:"I agree to Adrika storing the answers above to prepare and update this report. We hold institution names and nomination status only — never account numbers, PAN or balances. Ask us to delete it on WhatsApp any time; we purge inactive records after 36 months."}));
+  s.appendChild(c);
+  return s;
+}
+
+/* ---------- flow ---------- */
+function steps(){
+  var out=[
+    {k:"identity",b:screenIdentity,ok:function(){return S.name&&S.mobile&&S.city;}},
+    {k:"about",   b:screenAbout,   ok:function(){return S.age&&S.marital&&S.law;}},
+    {k:"deps",    b:screenDeps,    ok:function(){return S.deps.length&&S.minors;}},
+    {k:"cats",    b:screenCats,    ok:function(){return S.cats.length>0;}}
+  ];
+  CATS.forEach(function(c){
+    if(S.cats.indexOf(c.c)>-1) out.push({
+      k:"h-"+c.c,
+      b:function(){return screenHolding(c.c);},
+      ok:(function(code){return function(){
+        var h=S.holdings[code];
+        return h && h.inst.some(function(x){return x.trim();}) && h.count && (!CATMAP[code].nom || h.nom);
+      };})(c.c)
+    });
+  });
+  out.push({k:"legal",b:screenLegal,ok:function(){
+    return S.will && S.docsKnown && S.joint && S.nri && (S.minors!=="Yes"||S.guardian);
+  }});
+  out.push({k:"trusted",b:screenTrusted,ok:function(){ return S.tName&&S.tRel&&S.tShare&&S.consent; }});
+  return out;
+}
+var step=0;
+
+function render(){
+  var st=steps();
+  if(step>=st.length) step=st.length-1;
+  var host=document.getElementById("screens");
+  host.innerHTML="";
+  var s=el("div",{class:"screen on"});
+  s.appendChild(st[step].b());
+
+  var nav=el("div",{class:"navrow"});
+  if(step>0){
+    var back=el("button",{class:"btn ghost",type:"button",text:"Back"});
+    back.onclick=function(){ step--; render(); window.scrollTo(0,0); };
+    nav.appendChild(back);
+  }
+  nav.appendChild(el("div",{class:"spacer"}));
+  var last=step===st.length-1;
+  var next=el("button",{class:"btn",type:"button",id:"nextBtn",text:last?"Generate my report":"Continue"});
+  next.disabled=!st[step].ok();
+  next.onclick=function(){
+    if(last){ buildReport(S,false); show("report"); window.scrollTo(0,0); }
+    else { step++; render(); window.scrollTo(0,0); }
+  };
+  nav.appendChild(next);
+  s.appendChild(nav);
+  host.appendChild(s);
+
+  var pct=Math.round(((step+1)/st.length)*100);
+  document.getElementById("pfill").style.width=pct+"%";
+  document.getElementById("plabel").textContent="Step "+(step+1)+" of "+st.length;
+}
+function refreshNav(){
+  var st=steps(), b=document.getElementById("nextBtn");
+  if(b) b.disabled=!st[step].ok();
+}
+
+/* ---------- scoring ---------- */
+function score(d){
+  var elig=[],gaps=[],covered=[];
+  d.cats.forEach(function(c){
+    if(!CATMAP[c].nom) return;
+    var h=d.holdings[c]; if(!h) return;
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(name){
+      var rec={cat:c,name:name,nom:h.nom,rel:h.rel,band:h.band};
+      elig.push(rec);
+      if(h.nom==="Yes") covered.push(rec); else gaps.push(rec);
+    });
+  });
+  var movable=0,anyBand=false;
+  d.cats.forEach(function(c){
+    if(!CATMAP[c].nom) return;
+    var h=d.holdings[c]; if(!h||!h.band) return;
+    var v=BANDS[h.band]||0;
+    if(v){ anyBand=true; movable+=v; }
+  });
+  var flags=[];
+  if(d.minors==="Yes"&&d.guardian==="No") flags.push("Your children are minors and no guardian is named anywhere. A court would decide.");
+  var big=null,bigv=-1;
+  elig.forEach(function(r){ var v=BANDS[r.band]||0; if(v>bigv){bigv=v;big=r;} });
+  if(big&&big.nom==="Yes"&&big.rel&&big.rel!=="Spouse"&&d.deps.indexOf("Spouse")>-1)
+    flags.push("Your largest holding names a "+big.rel.toLowerCase()+" as nominee, while your spouse depends on you. Those two do not have to agree, and often don't.");
+  if(d.will==="Written but unsigned") flags.push("Your will is written but unsigned, which means it does not exist in law.");
+  if(d.willAge==="Over 5 years"||d.willAge==="Don't remember") flags.push("Your will is over five years old. Assets bought since then may not be covered by it.");
+  if((d.cats.indexOf("PROP")>-1||d.cats.indexOf("BIZ")>-1)&&d.will==="No")
+    flags.push("You hold property or a business stake and have no will. Neither can be nominated, so both go to succession law.");
+  if(d.docsKnown==="No") flags.push("Nobody knows where your documents are kept.");
+  if(d.nri==="Yes"&&d.will==="No") flags.push("You have heirs outside India and no will, which adds months to every claim.");
+
+  var lo=0,hi=0;
+  if(anyBand){
+    lo=Math.min(movable*0.02,75000)+45000;
+    hi=Math.min(movable*0.03,75000)+45000;
+    if(hi<=lo) hi=lo*1.2;
+  }
+  return {elig:elig,gaps:gaps,covered:covered,flags:flags,movable:movable,anyBand:anyBand,lo:lo,hi:hi};
+}
+
+/* ---------- report ---------- */
+function sheet(no,title,body){
+  var s=el("section",{class:"sheet"});
+  var h=el("div",{class:"sheet-head"});
+  h.appendChild(el("h3",{text:title}));
+  h.appendChild(el("span",{class:"sheet-no",text:"Page "+no+" of 6"}));
+  s.appendChild(h);
+  body.forEach(function(n){ s.appendChild(n); });
+  return s;
+}
+function buildReport(d,isSample){
+  var r=score(d), host=document.getElementById("report");
+  host.innerHTML="";
+  document.getElementById("src-chip").textContent = isSample
+    ? "Showing sample data — Rohit Nair, Bengaluru"
+    : "Generated from your answers";
+
+  /* page 1 — asset map */
+  var p1=[];
+  p1.push(el("p",{text:"Prepared for "+(d.name||"—")+", "+(d.city||"—")+". Institution names and nomination status only — this document contains no account numbers, policy numbers or balances, by design."}));
+  d.cats.forEach(function(c){
+    var h=d.holdings[c]; if(!h) return;
+    var g=el("div",{class:"grp"});
+    g.appendChild(el("h4",{text:CATMAP[c].n}));
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(name){
+      var ln=el("div",{class:"line"});
+      ln.appendChild(el("span",{class:"nm",text:name}));
+      if(!CATMAP[c].nom) ln.appendChild(el("span",{class:"st na",text:"No nomination possible"}));
+      else if(h.nom==="Yes") ln.appendChild(el("span",{class:"st yes",text:"Nominee: "+(h.rel||"registered")}));
+      else ln.appendChild(el("span",{class:"st no",text:h.nom==="Don't know"?"Status unknown":"No nominee"}));
+      g.appendChild(ln);
+    });
+    p1.push(g);
+  });
+  host.appendChild(sheet(1,"Your asset map",p1));
+
+  /* page 2 — gap score */
+  var p2=[];
+  var sc=el("div",{class:"score"});
+  sc.appendChild(el("span",{class:"score-n"+(r.gaps.length?"":" clean"),text:String(r.gaps.length)}));
+  sc.appendChild(el("span",{class:"score-t",
+    text: r.gaps.length
+      ? "of your "+r.elig.length+" institutions have no nominee on record"
+      : "gaps. Every institution that can carry a nominee has one."}));
+  p2.push(sc);
+  if(r.flags.length){
+    p2.push(el("p",{style:"font-family:var(--f-ui);font-size:14px;color:var(--ink-soft);margin-top:24px;margin-bottom:0",
+      text:"Ranked by what it would cost your family, not by how much money is in it."}));
+    var ul=el("ol",{class:"flags"});
+    r.flags.slice(0,5).forEach(function(f){ ul.appendChild(el("li",{text:f})); });
+    p2.push(ul);
+  }
+  host.appendChild(sheet(2,"Your gap score",p2));
+
+  /* page 3 — consequence */
+  var p3=[];
+  if(r.anyBand){
+    p3.push(el("p",{text:"If you died this week, here is what your family would spend and wait before they could touch the money you left them."}));
+    p3.push(el("div",{class:"bignum",text:inr(r.lo)+" to "+inr(r.hi)}));
+    p3.push(el("p",{style:"font-family:var(--f-ui);font-size:14px;color:var(--ink-soft);margin-top:0",text:"in court fees and legal costs"}));
+    p3.push(el("div",{class:"bignum",text:(r.gaps.length?"6 to 12 months":"1 to 3 months")}));
+    p3.push(el("p",{style:"font-family:var(--f-ui);font-size:14px;color:var(--ink-soft);margin-top:0",text:"before the assets are in their hands"}));
+    p3.push(el("p",{text:"Where no nominee is on record, a bank or fund house will usually ask for a succession certificate. Court fees for one run 2 to 3 per cent of the movable estate in most states, capped in many at ₹75,000, and professional fees add around ₹45,000. Uncontested petitions take three to six months in Maharashtra; practitioners report a year or more in several other states."}));
+    p3.push(el("p",{class:"assume",text:"Assumes movable assets around "+inr(r.movable)+", taken from the value bands you picked. A nominated asset with a clean will can transmit in weeks instead — that is the whole point of the next page."}));
+  } else {
+    p3.push(el("p",{text:"You chose not to share value bands, so we have left the rupee estimate out rather than invent one."}));
+    p3.push(el("p",{text:"What we can say without them: where no nominee is on record, the family usually needs a succession certificate. Court fees run 2 to 3 per cent of the movable estate in most states, capped in many at ₹75,000, professional fees add around ₹45,000, and uncontested petitions take three to six months in Maharashtra and longer elsewhere."}));
+    p3.push(el("p",{class:"assume",text:"Reply to the report on WhatsApp with rough bands and we will send this page costed."}));
+  }
+  host.appendChild(sheet(3,"What your family would face",p3));
+
+  /* page 4 — fix list */
+  var p4=[];
+  if(r.gaps.length){
+    p4.push(el("p",{text:"Easiest first. Most people close four or five of these in one evening, at no cost, without us."}));
+    var fixes=r.gaps.slice().sort(function(a,b){ return (METHOD[a.cat].t.length)-(METHOD[b.cat].t.length); });
+    var ol=el("ol",{class:"fix"});
+    fixes.forEach(function(g,i){
+      var li=el("li",{});
+      li.appendChild(el("span",{class:"n",text:String(i+1)}));
+      var b=el("div",{class:"body"});
+      b.appendChild(el("div",{text:"Add a nominee at "+g.name}));
+      b.appendChild(el("div",{class:"meta",text:METHOD[g.cat].how+" · about "+METHOD[g.cat].t}));
+      li.appendChild(b);
+      ol.appendChild(li);
+    });
+    p4.push(ol);
+    var noWill=(d.cats.indexOf("PROP")>-1||d.cats.indexOf("GOLD")>-1||d.cats.indexOf("BIZ")>-1)&&d.will==="No";
+    if(noWill) p4.push(el("p",{style:"margin-top:18px",text:"Property, gold and business stakes cannot be nominated at all. The only instrument that covers them is a will, and that is the one item on this list you cannot do yourself in an evening."}));
+  } else {
+    p4.push(el("p",{text:"Nothing to fix on nominations. Every institution that can carry a nominee has one."}));
+    p4.push(el("p",{text:"The remaining work is your will, which is the only instrument that covers property, gold and business stakes, and the only one that says who ultimately owns what a nominee is merely holding."}));
+  }
+  host.appendChild(sheet(4,"Your fix list",p4));
+
+  /* page 5 — free tools */
+  var p5=[];
+  p5.push(el("p",{text:"None of these cost anything and none of them involve us. Use them before you pay anyone, including us."}));
+  var tl=el("ul",{class:"tools"});
+  [["DigiLocker Data Access Nominee","Since 1 April 2025 you can name a nominee inside DigiLocker who is notified automatically when a death is registered, and gets read-only access to your demat, mutual fund and CAS statements. This is the closest thing to a free version of this report."],
+   ["RBI UDGAM","Searches dormant deposits across participating banks in one place. Useful for accounts a parent opened decades ago."],
+   ["SEBI MITRA","Run by CAMS and KFintech. Finds mutual fund folios with no investor-initiated transaction in ten years — the ones that never appear on a consolidated statement."],
+   ["IRDAI Bima Bharosa","Central search for unclaimed amounts across life, general and health insurers."]
+  ].forEach(function(t){
+    var li=el("li",{});
+    li.appendChild(el("b",{text:t[0]}));
+    li.appendChild(el("span",{text:t[1]}));
+    tl.appendChild(li);
+  });
+  p5.push(tl);
+  host.appendChild(sheet(5,"Free tools you should use first",p5));
+
+  /* page 6 — handover */
+  var p6=[];
+  p6.push(el("p",{text:"For "+(d.tName||"—")+(d.tRel?", "+d.tRel.toLowerCase():"")+". Print this page and keep it somewhere they can find it."}));
+  var names=[];
+  d.cats.forEach(function(c){
+    var h=d.holdings[c]; if(!h) return;
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(n){ names.push(n+" ("+CATMAP[c].n.toLowerCase()+")"); });
+  });
+  p6.push(el("p",{text:(d.name||"This person")+" held money or documents with: "+names.join("; ")+"."}));
+  p6.push(el("p",{style:"font-family:var(--f-ui);font-size:14px;color:var(--ink-soft)",text:"There are no account numbers on this page, and none are stored anywhere. Each institution will give you the details once you show a death certificate."}));
+  var ol=el("ol",{class:"steps"});
+  ["Get at least eight certified copies of the death certificate from the municipal office. Every institution keeps one.",
+   "Call each institution above and ask for its transmission or death-claim form. Start with the bank — it is usually the fastest.",
+   "Where a nominee is registered, the nominee applies directly. No court is involved.",
+   "Where none is registered, ask the institution in writing what it needs. Do not go to court until at least one of them has told you it is unavoidable.",
+   "Search UDGAM, MITRA and Bima Bharosa for anything that was never mentioned."
+  ].forEach(function(t){ ol.appendChild(el("li",{text:t})); });
+  p6.push(ol);
+  p6.push(el("div",{class:"stamp",text:"Adrika · reach us on the number this report came from"}));
+  host.appendChild(sheet(6,"If something happens",p6));
+}
+
+/* ---------- views ---------- */
+function show(v){
+  ["journey","report","plans"].forEach(function(x){
+    document.getElementById("view-"+x).hidden = (x!==v);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
+    t.setAttribute("aria-selected", t.dataset.view===v ? "true":"false");
+  });
+}
+Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
+  t.onclick=function(){ show(t.dataset.view); window.scrollTo(0,0); };
+});
+document.getElementById("loadSample").onclick=function(){
+  buildReport(SAMPLE,true); window.scrollTo(0,0);
+};
+
+/* ---------- boot ---------- */
+render();
+buildReport(SAMPLE,true);
+})();
+</script>
+</body>
+</html>
