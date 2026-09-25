@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member home — SurakshaOne</title>
+<meta name="description" content="SurakshaOne member area. LifeSecure Family Protection Report is available first.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111826; --ink-soft:#666c78; --mute:#8b919c;
+    --brand-blue:#2c5fdd; --brand-blue-deep:#3738ac; --brand-cyan:#00b0d6;
+    --paper:#ffffff; --paper-2:#f2f5fb;
+    --line:#e5e8ed; --line-2:rgba(17,24,38,.08);
+    --sh:0 8px 28px rgba(44,95,221,.10);
+    --ok:#1f6b4c; --ok-bg:#ebf3ef;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Inter',system-ui,sans-serif;margin:0;line-height:1.12;letter-spacing:-.02em;font-weight:700}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button{font-family:inherit;cursor:pointer}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .navbar{max-width:var(--maxw);margin:0 auto;padding:13px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{height:34px;width:auto}
+  .brand-name{font-weight:700;font-size:19px}
+  .brand-name b{color:var(--brand-blue)}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .nav-right span{font-size:13.5px;color:var(--ink-soft)}
+  .nav-right button,.nav-right a{font-size:14px;font-weight:600;color:var(--ink-soft);background:none;border:none;padding:0}
+  .nav-right button:hover,.nav-right a:hover{color:var(--ink)}
+  .hero{
+    padding:56px 0 28px;
+    background:
+      radial-gradient(ellipse 70% 50% at 0% 0%, rgba(44,95,221,.10), transparent 55%),
+      var(--paper);
+  }
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-blue);font-weight:500;margin-bottom:14px}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan))}
+  h1{font-size:clamp(28px,4vw,40px);font-weight:600;margin-bottom:10px}
+  .lead{margin:0;max-width:54ch;font-size:16.5px;color:var(--ink-soft)}
+  .section{padding:28px 0 72px}
+  .sec-head{margin-bottom:18px}
+  .sec-head h2{font-size:22px;font-weight:600;margin-bottom:6px}
+  .sec-head p{margin:0;font-size:14.5px;color:var(--ink-soft);max-width:60ch}
+  .life{
+    display:grid;grid-template-columns:1.4fr .9fr;gap:28px;align-items:stretch;
+    padding:28px;border-radius:22px;border:1px solid var(--line);
+    background:linear-gradient(135deg,#fff 0%,#f4f7ff 55%,#eefafc 100%);
+    box-shadow:var(--sh);
+  }
+  @media (max-width:860px){.life{grid-template-columns:1fr}}
+  .life h3{font-size:26px;font-weight:600;margin-bottom:10px}
+  .life h3 em{font-style:normal;background:linear-gradient(100deg,var(--brand-blue-deep),var(--brand-blue) 45%,var(--brand-cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .life .blurb{margin:0 0 18px;font-size:15.5px;color:var(--ink-soft);max-width:52ch}
+  .life ul{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:10px}
+  .life li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft)}
+  .life li strong{display:block;color:var(--ink);font-weight:600;margin-bottom:1px}
+  .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan));flex-shrink:0;margin-top:6px}
+  .btn{display:inline-block;padding:13px 24px;border-radius:100px;font-weight:600;font-size:15px;border:1px solid transparent}
+  .btn-p{background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));color:#fff;box-shadow:0 10px 28px rgba(44,95,221,.28)}
+  .btn-g{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px}
+  .side{
+    background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  }
+  .side h4{font-size:14px;font-weight:600;margin-bottom:12px}
+  .side .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-2);font-size:13.5px}
+  .side .row:last-child{border-bottom:none}
+  .side .row span{color:var(--ink-soft)}
+  .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--ok-bg);color:var(--ok)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px}
+  @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  .muted{
+    padding:18px 20px;border-radius:14px;border:1px dashed var(--line);background:var(--paper-2);
+  }
+  .muted h4{font-size:15px;font-weight:600;margin-bottom:4px}
+  .muted p{margin:0;font-size:13.5px;color:var(--ink-soft)}
+  .rule{font-size:12.5px;color:var(--mute);margin-top:18px;max-width:70ch}
+</style>
+</head>
+<body>
+<header>
+  <div class="navbar">
+    <a href="index.html" class="brand"><img src="/logo.png" alt="SurakshaOne"><span class="brand-name">Suraksha<b>One</b></span></a>
+    <div class="nav-right">
+      <span id="memberHello">Signed in</span>
+      <button type="button" id="memberLogout">Log out</button>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Member area</div>
+      <h1>Your protections</h1>
+      <p class="lead">LifeSecure is live first. The Family Protection Report maps institutions and nomination gaps — never account numbers, PAN or balances.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>LifeSecure</h2>
+      </div>
+
+      <div class="life">
+        <div>
+          <h3>Family Protection <em>Report</em></h3>
+          <p class="blurb">Twelve screens. A six-page map of every institution you named, which have no nominee, what your family would face, and a fix list — plus free government tools and a one-pager for your trusted person.</p>
+          <ul>
+            <li><span class="dot"></span><div><strong>Store the map, not the treasure</strong>Institution names and nomination status only. No account numbers, folio numbers or balances.</div></li>
+            <li><span class="dot"></span><div><strong>Gap score + red flags</strong>Don’t-know counts as a gap. Guardian missing for minors always ranks first.</div></li>
+            <li><span class="dot"></span><div><strong>Paid offers sit behind the free report</strong>Nomination Fix ₹2,500 · Adrika Will ₹9,500 / ₹18,000 · Claim Assist ₹25,000 + 10% on recovered dormant assets.</div></li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-p" href="/member/family-protection-report.html">Start Family Protection Report</a>
+            <a class="btn btn-g" href="/member/family-protection-report.html?view=plans">See offer stack</a>
+          </div>
+          <p class="rule">Architectural rule from the build spec: capture institution + nominee status. Never capture account numbers, policy numbers, PAN, balances or uploaded documents.</p>
+        </div>
+        <aside class="side">
+          <h4>What’s in this build</h4>
+          <div class="row"><strong>Journey</strong><span class="badge">Live</span></div>
+          <div class="row"><strong>12-question form</strong><span>Screens 1–12</span></div>
+          <div class="row"><strong>Asset checklist</strong><span>14 categories</span></div>
+          <div class="row"><strong>Report preview</strong><span>6 pages</span></div>
+          <div class="row"><strong>Plans &amp; triggers</strong><span>Offer stack</span></div>
+          <div class="row"><strong>PDF / WhatsApp delivery</strong><span>Not wired yet</span></div>
+          <div class="row"><strong>Ops case tracker</strong><span>Not wired yet</span></div>
+        </aside>
+      </div>
+
+      <div class="grid">
+        <div class="muted"><h4>Wellness</h4><p>Coming next in the member area.</p></div>
+        <div class="muted"><h4>CyberSafe</h4><p>Coming next in the member area.</p></div>
+        <div class="muted"><h4>TravelShield</h4><p>Coming next in the member area.</p></div>
+        <div class="muted"><h4>ParentCare</h4><p>Coming next in the member area.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

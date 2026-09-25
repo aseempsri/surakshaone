@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LifeSecure — Family Protection Report | SurakshaOne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111826; --ink-soft:#666c78; --mute:#8b919c;
+  --brand-blue:#2c5fdd; --brand-blue-deep:#3738ac; --brand-cyan:#00b0d6;
+  --paper:#ffffff; --paper-2:#f2f5fb;
+  --line:#e5e8ed; --line-2:rgba(17,24,38,.08);
+  --gap:#e7000b; --gap-bg:#fff1f1;
+  --ok:#1f6b4c; --ok-bg:#ebf3ef;
+  --sh:0 8px 28px rgba(44,95,221,.10);
+  --maxw:1180px;
+  --f-ui:"Inter",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:
+    radial-gradient(ellipse 80% 50% at 50% -8%, rgba(44,95,221,.10), transparent 55%),
+    var(--paper);
+  color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--brand-blue);outline-offset:2px;border-radius:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.navbar{max-width:var(--maxw);margin:0 auto;padding:13px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{height:34px;width:auto;display:block}
+.brand-name{font-weight:700;font-size:19px}
+.brand-name b{color:var(--brand-blue)}
+.brand-sub{font-size:13px;font-weight:500;color:var(--ink-soft);margin-left:4px}
+.nav-mid{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.back{font-size:13.5px;font-weight:600;color:var(--ink-soft)}
+.back:hover{color:var(--ink)}
+.tabs{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.tab{
+  background:transparent;border:1.5px solid transparent;border-radius:100px;
+  padding:8px 16px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+}
+.tab:hover{color:var(--ink);background:var(--paper-2)}
+.tab[aria-selected="true"]{
+  color:#fff;border-color:transparent;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));
+  box-shadow:0 8px 22px rgba(44,95,221,.22);
+}
+.wrap{max-width:720px;margin:0 auto;padding:40px 28px 96px}
+.wrap.wide{max-width:960px}
+.lede{font-size:16.5px;line-height:1.6;color:var(--ink-soft);margin:0 0 28px;max-width:60ch}
+h2.sec{font-size:24px;font-weight:600;letter-spacing:-.02em;margin:0 0 8px}
+
+.progress{
+  display:grid;grid-template-columns:1fr auto;gap:10px 14px;align-items:center;
+  margin-bottom:22px;padding:16px 18px;border-radius:16px;background:#fff;
+  border:1px solid var(--line);box-shadow:0 4px 18px rgba(44,95,221,.06);
+}
+.progress-track{grid-column:1/-1;height:8px;background:var(--paper-2);border-radius:100px;overflow:hidden;border:1px solid var(--line)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--brand-blue-deep),var(--brand-blue),var(--brand-cyan));transition:width .35s ease;border-radius:100px}
+.progress-label{font-size:13px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.progress-phase{font-size:12.5px;font-weight:600;color:var(--brand-blue);justify-self:end}
+
+.journey-shell{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  box-shadow:var(--sh);padding:28px 26px 22px;
+  animation:journeyIn .32s ease;
+}
+@keyframes journeyIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.journey-shell{animation:none}}
+
+.screen{display:none}
+.screen.on{display:block}
+.step-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-blue);font-weight:600;margin-bottom:12px}
+.step-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan))}
+.q{margin:0 0 8px;font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.q-help{margin:0 0 22px;font-size:15px;color:var(--ink-soft);max-width:52ch}
+
+.live-bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.live-pill{
+  font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;
+  background:var(--paper-2);border:1px solid var(--line);color:var(--mute);
+}
+.live-pill.on{background:var(--ok-bg);border-color:#c6e6d5;color:var(--ok)}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:8px}
+.field .opt{font-weight:400;color:var(--ink-soft)}
+.field-card{
+  padding:14px 14px 12px;border-radius:16px;border:1.5px solid var(--line);
+  background:var(--paper-2);transition:border-color .15s, background .15s, box-shadow .15s;
+}
+.field-card:focus-within{
+  background:#fff;border-color:var(--brand-blue);
+  box-shadow:0 0 0 4px rgba(44,95,221,.12);
+}
+.field-card.filled{background:#fff;border-color:rgba(31,107,76,.35)}
+.field-card input{
+  width:100%;padding:4px 2px;font:inherit;font-size:16px;font-weight:500;
+  background:transparent;color:var(--ink);border:none;
+}
+.field-card input:focus{outline:none}
+.field-card .hint{margin-top:8px}
+
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.quick button{
+  padding:6px 11px;font-size:12.5px;font-weight:600;border-radius:99px;cursor:pointer;
+  background:#fff;border:1px solid var(--line);color:var(--ink-soft);
+}
+.quick button:hover{border-color:var(--brand-blue);color:var(--brand-blue)}
+
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{
+  padding:11px 16px;font-size:14px;font-weight:500;background:#fff;
+  border:1.5px solid var(--line);border-radius:14px;cursor:pointer;text-align:left;
+  transition:transform .12s, border-color .12s, box-shadow .12s, background .12s;
+}
+.choice:hover{border-color:var(--brand-blue);background:var(--paper-2);transform:translateY(-1px)}
+.choice[aria-pressed="true"]{
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));
+  color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(44,95,221,.22);
+}
+.choice.block{width:100%;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:16px}
+.choice.block .ck{
+  width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);flex:0 0 20px;margin-top:1px;
+  display:grid;place-items:center;font-size:11px;color:transparent;background:#fff;
+}
+.choice.block[aria-pressed="true"] .ck{background:#fff;border-color:#fff;color:var(--brand-blue)}
+.choice.block .tx b{display:block;font-weight:600;font-size:14.5px}
+.choice.block .tx small{display:block;font-size:12.5px;opacity:.85;margin-top:2px;font-weight:400}
+
+.choice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.choice-grid .choice{justify-content:center;text-align:center}
+
+.sel-count{
+  display:inline-flex;align-items:center;gap:6px;margin:0 0 14px;padding:6px 12px;
+  border-radius:99px;background:#eaf0ff;border:1px solid rgba(44,95,221,.16);
+  font-size:12.5px;font-weight:600;color:var(--brand-blue);
+}
+
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.cat{
+  display:flex;align-items:flex-start;gap:12px;padding:14px 14px;
+  background:#fff;border:1.5px solid var(--line);border-radius:16px;
+  cursor:pointer;text-align:left;font-size:14px;line-height:1.35;
+  transition:transform .12s, border-color .12s, box-shadow .12s;
+}
+.cat:hover{border-color:rgba(44,95,221,.35);transform:translateY(-1px)}
+.cat[aria-pressed="true"]{border-color:var(--brand-blue);box-shadow:0 10px 24px rgba(44,95,221,.12);background:#f7f9ff}
+.cat .ico{
+  width:36px;height:36px;border-radius:11px;flex:0 0 36px;display:grid;place-items:center;
+  font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--brand-blue);
+  background:linear-gradient(145deg,#eaf0ff,#eefafc);border:1px solid rgba(44,95,221,.14);
+}
+.cat[aria-pressed="true"] .ico{color:#fff;background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-cyan));border-color:transparent}
+.cat .body{flex:1;min-width:0}
+.cat b{display:block;font-weight:600}
+.cat small{color:var(--ink-soft);font-size:12px}
+.cat .tick{
+  width:20px;height:20px;flex:0 0 20px;margin-top:8px;border:1.5px solid var(--line);border-radius:6px;
+  display:grid;place-items:center;font-size:11px;color:transparent;background:#fff;
+}
+.cat[aria-pressed="true"] .tick{background:var(--brand-blue);border-color:var(--brand-blue);color:#fff}
+
+.cat-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.cat-filters button{
+  padding:7px 12px;border-radius:99px;font-size:12.5px;font-weight:600;cursor:pointer;
+  background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);
+}
+.cat-filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.inst-block{display:grid;gap:10px}
+.instrow{display:flex;gap:8px;align-items:center}
+.instrow .field-card{flex:1;margin:0}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.chip-row button{
+  padding:7px 12px;border-radius:99px;font-size:12.5px;font-weight:600;cursor:pointer;
+  background:#fff;border:1.5px dashed var(--line);color:var(--ink-soft);
+}
+.chip-row button:hover{border-style:solid;border-color:var(--brand-blue);color:var(--brand-blue);background:#eaf0ff}
+.chip-row button.used{opacity:.35;pointer-events:none}
+
+.linkbtn{background:none;border:none;color:var(--brand-blue);font-size:13.5px;font-weight:600;cursor:pointer;padding:6px 0}
+.linkbtn:hover{color:var(--brand-blue-deep)}
+.xbtn{background:#fff;border:1.5px solid var(--line);border-radius:12px;width:44px;height:44px;cursor:pointer;color:var(--ink-soft);flex:0 0 44px}
+.xbtn:hover{border-color:var(--gap);color:var(--gap);background:var(--gap-bg)}
+
+.holding-head{display:flex;align-items:flex-start;justify-content:flex-end;gap:12px;margin-bottom:6px}
+.holding-badge{font-size:12px;font-weight:600;padding:6px 10px;border-radius:99px;background:#eaf0ff;color:var(--brand-blue);border:1px solid rgba(44,95,221,.16);white-space:nowrap}
+
+.navrow{display:flex;gap:10px;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.btn{
+  padding:12px 22px;font-size:15px;font-weight:600;border-radius:100px;cursor:pointer;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));
+  color:#fff;border:1.5px solid transparent;box-shadow:0 10px 28px rgba(44,95,221,.24);
+  transition:transform .12s, box-shadow .12s;
+}
+.btn:hover{box-shadow:0 14px 34px rgba(44,95,221,.32);transform:translateY(-1px)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--ink);background:var(--paper-2);transform:none}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.spacer{flex:1}
+.nav-hint{font-size:12.5px;color:var(--mute);margin-right:8px}
+
+.consent{
+  display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;
+  padding:16px;background:linear-gradient(135deg,#f7f9ff,#fff);border:1.5px solid rgba(44,95,221,.2);border-radius:16px;
+  cursor:pointer;transition:border-color .15s, box-shadow .15s;
+}
+.consent:hover{border-color:var(--brand-blue)}
+.consent.on{border-color:var(--brand-blue);box-shadow:0 0 0 4px rgba(44,95,221,.1)}
+.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--brand-blue)}
+.notice{
+  font-size:13.5px;line-height:1.5;color:var(--ink-soft);
+  border-radius:14px;padding:14px 16px;margin:14px 0;
+  background:#eefafc;border:1px solid rgba(0,176,214,.25);
+}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
+
+
+.reportbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+.chip{font-size:12.5px;font-weight:600;color:var(--brand-blue);background:#eaf0ff;border:1px solid rgba(44,95,221,.18);border-radius:99px;padding:5px 12px}
+
+.rpt-nav{
+  display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;margin-bottom:8px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.rpt-nav::-webkit-scrollbar{display:none}
+.rpt-nav a{
+  flex:0 0 auto;padding:8px 14px;border-radius:100px;font-size:13px;font-weight:600;
+  color:var(--ink-soft);background:#fff;border:1.5px solid var(--line);white-space:nowrap;
+}
+.rpt-nav a:hover{border-color:var(--brand-blue);color:var(--ink)}
+.rpt-nav a .n{display:inline-block;width:18px;height:18px;border-radius:50%;margin-right:6px;
+  font-size:11px;line-height:18px;text-align:center;background:var(--paper-2);color:var(--mute);vertical-align:middle}
+
+.rpt-hero{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:22px;
+}
+.rpt-hero-main{
+  padding:28px 28px 24px;border-radius:22px;border:1px solid rgba(44,95,221,.16);
+  background:linear-gradient(145deg,#fff 0%,#f4f7ff 48%,#eaf8fb 100%);box-shadow:var(--sh);
+}
+.rpt-hero-main .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-blue);font-weight:600;margin-bottom:12px}
+.rpt-hero-main .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan))}
+.rpt-hero-main h2{font-size:clamp(24px,3.4vw,32px);font-weight:600;letter-spacing:-.02em;margin:0 0 8px;line-height:1.15}
+.rpt-hero-main p{margin:0;font-size:14.5px;color:var(--ink-soft);max-width:46ch;line-height:1.55}
+.rpt-hero-main .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.rpt-hero-main .meta span{font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:99px;background:#fff;border:1px solid var(--line);color:var(--ink-soft)}
+
+.gap-ring-card{
+  padding:22px;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;
+}
+.gap-ring{
+  --pct:70; width:148px;height:148px;border-radius:50%;
+  background:conic-gradient(var(--gap) calc(var(--pct)*1%), #e8edf8 0);
+  display:grid;place-items:center;position:relative;
+}
+.gap-ring.clean{background:conic-gradient(var(--ok) calc(var(--pct)*1%), #e8edf8 0)}
+.gap-ring::before{
+  content:"";position:absolute;inset:14px;border-radius:50%;background:#fff;
+}
+.gap-ring .inner{position:relative;z-index:1}
+.gap-ring .inner b{display:block;font-size:42px;font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--gap)}
+.gap-ring.clean .inner b{color:var(--ok)}
+.gap-ring .inner span{font-size:12px;font-weight:600;color:var(--mute)}
+.gap-ring-card .caption{font-size:14px;font-weight:500;color:var(--ink);line-height:1.35;max-width:18ch}
+
+.rpt-sec{scroll-margin-top:88px;margin-bottom:18px}
+.rpt-sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:8px 4px 12px}
+.rpt-sec-head h3{margin:0;font-size:18px;font-weight:600;letter-spacing:-.015em}
+.rpt-sec-head .pg{font-size:12.5px;font-weight:600;color:var(--mute)}
+
+.sheet{
+  background:#fff;border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--sh);padding:26px 26px 22px;margin-bottom:0;
+}
+.sheet > .lead{margin:0 0 18px;font-size:14.5px;color:var(--ink-soft);line-height:1.55;max-width:68ch}
+
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.map-card{border:1.5px solid var(--line);border-radius:16px;padding:14px 14px 12px;background:var(--paper-2)}
+.map-card h4{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+.map-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line-2)}
+.map-row:first-of-type{border-top:none;padding-top:0}
+.map-row .nm{font-size:14.5px;font-weight:500}
+.st{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.st.no{background:var(--gap-bg);color:var(--gap)}
+.st.yes{background:var(--ok-bg);color:var(--ok)}
+.st.na{background:#fff;color:var(--ink-soft);border:1px solid var(--line)}
+
+.flag-stack{display:grid;gap:10px;margin-top:4px}
+.flag-card{
+  display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;
+  padding:14px 16px;border-radius:14px;background:linear-gradient(90deg,#fff7f7,#fff);border:1px solid #ffd6d6;
+}
+.flag-card .ix{
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;font-weight:700;color:#fff;background:var(--gap);
+}
+.flag-card p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.flag-note{margin:14px 0 0;font-size:13px;color:var(--mute)}
+
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.impact-card{
+  padding:22px 20px;border-radius:16px;border:1px solid var(--line);
+  background:linear-gradient(160deg,#f7f9ff,#fff);
+}
+.impact-card .lbl{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.impact-card .val{font-size:clamp(22px,3vw,28px);font-weight:700;letter-spacing:-.03em;color:var(--brand-blue-deep);line-height:1.15}
+.impact-card .sub{margin-top:8px;font-size:13.5px;color:var(--ink-soft)}
+.assume{font-size:13px;color:var(--mute);line-height:1.5;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+
+.fix-grid{display:grid;gap:10px}
+.fix-card{
+  display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;
+  padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;
+}
+.fix-card .n{
+  width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
+  font-size:14px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-cyan));
+}
+.fix-card .body{min-width:0}
+.fix-card .body b{display:block;font-size:14.5px;font-weight:600;margin-bottom:2px}
+.fix-card .body span{font-size:13px;color:var(--ink-soft)}
+.fix-card .time{
+  font-size:12px;font-weight:600;padding:6px 10px;border-radius:99px;white-space:nowrap;
+  background:#eaf0ff;color:var(--brand-blue);border:1px solid rgba(44,95,221,.16);
+}
+.fix-note{margin:14px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.5}
+
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool-card{padding:18px 16px;border-radius:16px;border:1px solid var(--line);background:var(--paper-2)}
+.tool-card .ico{
+  width:34px;height:34px;border-radius:10px;margin-bottom:10px;display:grid;place-items:center;
+  font-size:14px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-cyan));
+}
+.tool-card b{display:block;font-size:14.5px;font-weight:600;margin-bottom:6px}
+.tool-card span{font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+
+.handover{
+  border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);background:#fff;
+}
+.handover-top{
+  padding:22px 24px;background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 50%,var(--brand-cyan));color:#fff;
+}
+.handover-top .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:8px}
+.handover-top h3{margin:0 0 6px;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.handover-top p{margin:0;font-size:14.5px;opacity:.92;max-width:54ch;line-height:1.5}
+.handover-body{padding:22px 24px 24px}
+.handover-body .inst{margin:0 0 16px;font-size:14.5px;line-height:1.55;color:var(--ink)}
+.handover-body .note{margin:0 0 18px;font-size:13px;color:var(--mute);line-height:1.5}
+.handover-steps{list-style:none;margin:0;padding:0;counter-reset:hs;display:grid;gap:10px}
+.handover-steps li{
+  counter-increment:hs;display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;
+  padding:12px 14px;border-radius:12px;background:var(--paper-2);border:1px solid var(--line);
+  font-size:14.5px;line-height:1.45;
+}
+.handover-steps li::before{
+  content:counter(hs);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;font-weight:700;color:var(--brand-blue);background:#fff;border:1.5px solid rgba(44,95,221,.25);
+}
+.stamp{
+  font-size:12px;font-weight:600;color:var(--brand-blue);
+  border:1px solid rgba(44,95,221,.25);background:#eaf0ff;border-radius:99px;padding:6px 12px;display:inline-block;margin-top:18px;
+}
+
+@media (max-width:860px){
+  .rpt-hero{grid-template-columns:1fr}
+  .impact-grid,.tools-grid{grid-template-columns:1fr}
+  .fix-card{grid-template-columns:44px 1fr;grid-template-rows:auto auto}
+  .fix-card .time{grid-column:2;justify-self:start}
+}
+
+
+.ledger{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:10px}
+.ledger th{
+  text-align:left;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);
+  padding:0 12px 10px 0;border-bottom:1px solid var(--line);
+}
+.ledger td{padding:14px 12px 14px 0;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.45}
+.ledger tr:last-child td{border-bottom:none}
+.ledger .price{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--brand-blue-deep)}
+.ledger .plan{font-weight:600}
+.ledger td small{display:block;color:var(--ink-soft);font-size:13px;margin-top:3px;font-weight:400}
+.ledger .free{color:var(--ok)}
+.wrapx{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px 18px;box-shadow:var(--sh);margin-bottom:8px}
+.rules{margin:0;padding-left:20px;font-size:15px;line-height:1.6;color:var(--ink-soft)}
+.rules li{margin-bottom:9px;max-width:66ch}
+h3.sub{font-size:17px;font-weight:600;margin:34px 0 10px}
+
+/* ---------- plans page ---------- */
+.plans-hero{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding:28px 30px;margin:0 0 28px;border-radius:20px;border:1px solid rgba(44,95,221,.16);
+  background:linear-gradient(135deg,#fff 0%,#f4f7ff 50%,#eefafc 100%);box-shadow:var(--sh);
+}
+.plans-hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-blue);font-weight:600;margin-bottom:10px}
+.plans-hero .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan))}
+.plans-hero h2{font-size:clamp(26px,3.5vw,34px);font-weight:600;letter-spacing:-.02em;margin:0 0 8px}
+.plans-hero p{margin:0;max-width:48ch;font-size:15.5px;color:var(--ink-soft);line-height:1.55}
+.plans-hero .free-pill{
+  align-self:center;padding:18px 22px;border-radius:16px;background:#fff;border:1px solid var(--line);text-align:center;min-width:140px;
+}
+.plans-hero .free-pill b{display:block;font-size:28px;font-weight:700;color:var(--ok);letter-spacing:-.02em}
+.plans-hero .free-pill span{font-size:12.5px;color:var(--ink-soft);font-weight:500}
+
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px}
+.plan-card{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 20px 20px;
+  box-shadow:var(--sh);display:flex;flex-direction:column;gap:10px;min-height:100%;
+  transition:border-color .15s, transform .15s;
+}
+.plan-card:hover{border-color:rgba(44,95,221,.35);transform:translateY(-2px)}
+.plan-card.featured{
+  border-color:rgba(44,95,221,.28);
+  background:linear-gradient(180deg,#f7f9ff 0%,#fff 42%);
+  box-shadow:0 12px 32px rgba(44,95,221,.14);
+}
+.plan-card .tag{
+  display:inline-flex;align-self:flex-start;padding:4px 10px;border-radius:99px;
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;
+  background:var(--paper-2);color:var(--ink-soft);border:1px solid var(--line);
+}
+.plan-card.featured .tag{background:#eaf0ff;color:var(--brand-blue);border-color:rgba(44,95,221,.18)}
+.plan-card h3{font-size:17px;font-weight:600;letter-spacing:-.015em;margin:0;line-height:1.25}
+.plan-card .desc{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.45;flex:1}
+.plan-card .amt{font-size:28px;font-weight:700;letter-spacing:-.03em;color:var(--brand-blue-deep);line-height:1}
+.plan-card .amt.free{color:var(--ok)}
+.plan-card .amt small{display:block;font-size:12.5px;font-weight:500;color:var(--ink-soft);margin-top:6px;letter-spacing:0}
+.plan-meta{display:grid;gap:8px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line-2)}
+.plan-meta div{display:flex;flex-direction:column;gap:2px}
+.plan-meta .lbl{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+.plan-meta .val{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35}
+
+.section-block{margin-bottom:36px}
+.section-block .sec{margin-bottom:6px}
+.section-block .lede{margin-bottom:18px}
+
+.signal-list{display:grid;gap:10px}
+.signal-row{
+  display:grid;grid-template-columns:1fr auto 1.05fr;gap:14px;align-items:center;
+  padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(44,95,221,.06);
+}
+.signal-row .from{font-size:14.5px;font-weight:500;color:var(--ink);line-height:1.4}
+.signal-row .arrow{
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));color:#fff;font-size:16px;
+}
+.signal-row .to{
+  font-size:14px;font-weight:600;color:var(--brand-blue-deep);padding:8px 12px;border-radius:10px;
+  background:#eaf0ff;border:1px solid rgba(44,95,221,.14);text-align:center;line-height:1.3;
+}
+
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rule-card{
+  padding:18px 18px 16px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);
+}
+.rule-card .n{
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;margin-bottom:10px;
+  font-size:12px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-cyan));
+}
+.rule-card h4{font-size:15px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+.rule-card p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+
+@media (max-width:900px){
+  .plan-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  .plan-grid{grid-template-columns:1fr}
+  .rule-grid{grid-template-columns:1fr}
+  .signal-row{grid-template-columns:1fr;gap:10px}
+  .signal-row .arrow{display:none}
+  .signal-row .to{text-align:left}
+  .plans-hero{padding:22px 18px}
+}
+
+@media (max-width:720px){
+  .navbar{padding:12px 16px}
+  .wrap{padding:28px 16px 80px}
+  .sheet{padding:24px 18px}
+  .score-n{font-size:64px}
+  .tabs{width:100%;margin-left:0}
+  .tab{flex:1;text-align:center;padding:8px 10px;font-size:13px}
+  .brand-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="/member" class="brand">
+      <img src="/logo.png" alt="SurakshaOne">
+      <span class="brand-name">Suraksha<b>One</b></span>
+      <span class="brand-sub">LifeSecure</span>
+    </a>
+    <div class="nav-mid">
+      <a href="/member" class="back">← Member home</a>
+      <nav class="tabs" role="tablist" aria-label="LifeSecure sections">
+        <button class="tab" role="tab" aria-selected="true" data-view="journey">Journey</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="report">Report</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="plans">Plans</button>
+      </nav>
+    </div>
+  </div>
+</header>
+<!-- ============ JOURNEY ============ -->
+<main class="wrap narrow" id="view-journey">
+  <div class="progress">
+    <span class="progress-label" id="plabel">Step 1 of 12</span>
+    <span class="progress-phase" id="pphase">Who you are</span>
+    <div class="progress-track"><div class="progress-fill" id="pfill" style="width:8%"></div></div>
+  </div>
+  <div id="screens"></div>
+</main>
+
+<!-- ============ REPORT ============ -->
+<main class="wrap wide" id="view-report" hidden>
+  <div class="reportbar">
+    <div>
+      <h2 class="sec" style="margin-bottom:6px">Family Protection Report</h2>
+      <span class="chip" id="src-chip">Showing sample data</span>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="loadSample">Load sample data</button>
+  </div>
+  <nav class="rpt-nav" aria-label="Report chapters">
+    <a href="#rpt-map"><span class="n">1</span>Asset map</a>
+    <a href="#rpt-gaps"><span class="n">2</span>Gap score</a>
+    <a href="#rpt-impact"><span class="n">3</span>Family impact</a>
+    <a href="#rpt-fix"><span class="n">4</span>Fix list</a>
+    <a href="#rpt-tools"><span class="n">5</span>Free tools</a>
+    <a href="#rpt-handover"><span class="n">6</span>If something happens</a>
+  </nav>
+  <div id="report"></div>
+</main>
+
+<!-- ============ PLANS ============ -->
+<main class="wrap wide" id="view-plans" hidden>
+  <div class="plans-hero">
+    <div>
+      <div class="eyebrow">LifeSecure · offer stack</div>
+      <h2>Plans</h2>
+      <p>The report is free and always will be. It qualifies the lead and tells us which paid service actually applies — nothing is pitched on the report itself.</p>
+    </div>
+    <div class="free-pill">
+      <b>Free</b>
+      <span>Family Protection Report</span>
+    </div>
+  </div>
+
+  <div class="plan-grid">
+    <article class="plan-card featured">
+      <span class="tag">Entry · everyone</span>
+      <h3>Family Protection Report</h3>
+      <p class="desc">12 questions, six-page PDF on WhatsApp. Institution map, gap score, fix list and trusted-person handover.</p>
+      <div class="amt free">Free<small>Automated · no human touch</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">Everyone — the entry point</span></div>
+      </div>
+    </article>
+
+    <article class="plan-card">
+      <span class="tag">Ops</span>
+      <h3>Nomination Fix</h3>
+      <p class="desc">We chase every institution until the gap score is zero — without taking passwords or OTPs.</p>
+      <div class="amt">₹2,500<small>~2.5 hours with an ops associate</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">Three or more nomination gaps</span></div>
+      </div>
+    </article>
+
+    <article class="plan-card">
+      <span class="tag">Legal</span>
+      <h3>Adrika Will</h3>
+      <p class="desc">Lawyer-drafted will, unregistered. Covers property, business stakes and guardian naming.</p>
+      <div class="amt">₹9,500<small>Adrika Law Firm · in-house</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">Property, business stake, or minor children</span></div>
+      </div>
+    </article>
+
+    <article class="plan-card">
+      <span class="tag">Legal · registered</span>
+      <h3>Adrika Will, registered</h3>
+      <p class="desc">Drafted, executed and registered with the registrar for larger or blended estates.</p>
+      <div class="amt">₹18,000<small>Adrika + registrar</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">Estate over ₹1 Cr, or a blended family</span></div>
+      </div>
+    </article>
+
+    <article class="plan-card">
+      <span class="tag">Post-death</span>
+      <h3>Claim Assist</h3>
+      <p class="desc">Full settlement across every institution, plus a dormant-asset sweep on UDGAM, MITRA and Bima Bharosa.</p>
+      <div class="amt">₹25,000<small>+10% on recovered dormant assets only</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">A death in a covered household</span></div>
+        <div><span class="lbl">Typical time</span><span class="val">8 to 16 weeks</span></div>
+      </div>
+    </article>
+
+    <article class="plan-card">
+      <span class="tag">B2B</span>
+      <h3>Readiness, white-label</h3>
+      <p class="desc">The same report under a partner’s brand for employers, brokers and insurers.</p>
+      <div class="amt">₹60<small>per life, per year · automated</small></div>
+      <div class="plan-meta">
+        <div><span class="lbl">Offered when</span><span class="val">Channel / employer contracts</span></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="section-block">
+    <h2 class="sec">How a plan gets offered</h2>
+    <p class="lede">Nothing is pitched on the report. The offer is made afterwards, on a call, and only where the person’s own answers show it applies.</p>
+    <div class="signal-list">
+      <div class="signal-row">
+        <div class="from">Gap score of 3 or more</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Nomination Fix</div>
+      </div>
+      <div class="signal-row">
+        <div class="from">Minor children with no guardian named</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Adrika Will</div>
+      </div>
+      <div class="signal-row">
+        <div class="from">Property or a business stake and no will</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Adrika Will</div>
+      </div>
+      <div class="signal-row">
+        <div class="from">Will over five years old, or unsigned</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Adrika Will, as a rewrite</div>
+      </div>
+      <div class="signal-row">
+        <div class="from">Movable assets above ₹1 Cr, or NRI heirs</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Adrika Will, registered</div>
+      </div>
+      <div class="signal-row">
+        <div class="from">Nobody knows where the documents are kept</div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="to">Nomination Fix, then the will</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2 class="sec">Pricing rules</h2>
+    <p class="lede">Guardrails that keep the offer stack trustworthy.</p>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="n">1</div>
+        <h4>Never discount the report</h4>
+        <p>It is already free. Discounting anything under it destroys the price anchor.</p>
+      </div>
+      <div class="rule-card">
+        <div class="n">2</div>
+        <h4>Claim Assist is flat, never hourly</h4>
+        <p>A bereaved family cannot evaluate an hourly rate and will not engage on one.</p>
+      </div>
+      <div class="rule-card">
+        <div class="n">3</div>
+        <h4>10% only on unknown assets</h4>
+        <p>The success fee applies only to assets the family did not know existed — never on nominated assets they would have received anyway.</p>
+      </div>
+      <div class="rule-card">
+        <div class="n">4</div>
+        <h4>White-label buys distribution</h4>
+        <p>Priced low enough that partners treat it as free. We are buying reach, not ARR.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  if (sessionStorage.getItem('suraksha_member') !== '1') {
+    var base = document.querySelector('base')?.href || '/';
+    location.replace('/login');
+  }
+})();
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- reference data ---------- */
+var CATS=[
+ {c:"BANK",  n:"Savings / current accounts", s:"Up to 4 nominees", nom:true},
+ {c:"FD",    n:"Fixed / recurring deposits", s:"", nom:true},
+ {c:"DEMAT", n:"Demat / stocks",             s:"Up to 10 nominees", nom:true},
+ {c:"MF",    n:"Mutual funds",               s:"Up to 10 nominees", nom:true},
+ {c:"LIFE",  n:"Life insurance",             s:"", nom:true},
+ {c:"HEALTH",n:"Health insurance",           s:"Nominee for claim proceeds", nom:true},
+ {c:"EPF",   n:"EPF / EPS",                  s:"Via e-nomination", nom:true},
+ {c:"NPS",   n:"NPS",                        s:"", nom:true},
+ {c:"PPF",   n:"PPF / SSY / post office",    s:"", nom:true},
+ {c:"PROP",  n:"Property",                   s:"Will or succession only", nom:false},
+ {c:"GOLD",  n:"Gold, jewellery, locker",    s:"Will only", nom:false},
+ {c:"BIZ",   n:"Business / LLP stake",       s:"Depends on the deed", nom:false},
+ {c:"LOAN",  n:"Loans and liabilities",      s:"These transfer too", nom:false},
+ {c:"CRYPTO",n:"Crypto / digital assets",    s:"Seed phrase access only", nom:false}
+];
+var CATMAP={}; CATS.forEach(function(x){CATMAP[x.c]=x;});
+
+/* institution seed list — names only, for the autocomplete */
+var INST={
+ BANK:["SBI","HDFC Bank","ICICI Bank","Axis Bank","Kotak Mahindra","PNB","Bank of Baroda","Canara Bank","IndusInd","Yes Bank"],
+ FD:["SBI","HDFC Bank","Bajaj Finance","Shriram Finance","Post Office"],
+ DEMAT:["Zerodha","Groww","Upstox","Angel One","ICICI Direct","HDFC Securities","Kotak Securities"],
+ MF:["CAMS","KFintech","Groww","Zerodha Coin","MF Central"],
+ LIFE:["LIC","HDFC Life","ICICI Prudential","SBI Life","Max Life","Bajaj Allianz","Tata AIA"],
+ HEALTH:["Star Health","Niva Bupa","HDFC Ergo","Care Health","ICICI Lombard","Employer group cover"],
+ EPF:["EPFO"],
+ NPS:["NPS via NSDL","NPS via KFintech"],
+ PPF:["SBI","HDFC Bank","India Post"],
+ PROP:["Flat","Plot","Ancestral property","Commercial unit"],
+ GOLD:["Bank locker","Home safe","Digital gold"],
+ BIZ:["Private limited","LLP","Partnership","Proprietorship"],
+ LOAN:["Home loan","Car loan","Personal loan","Credit card"],
+ CRYPTO:["Exchange account","Self-custody wallet"]
+};
+
+/* nomination method library — the real asset */
+var METHOD={
+ BANK:{how:"Net banking, usually instant",t:"10 min"},
+ FD:{how:"Net banking or branch form",t:"15 min"},
+ DEMAT:{how:"Online with Aadhaar e-sign",t:"10 min"},
+ MF:{how:"CAMS or KFintech, online",t:"15 min"},
+ LIFE:{how:"Insurer portal, some need a physical form",t:"20 min"},
+ HEALTH:{how:"Insurer portal",t:"10 min"},
+ EPF:{how:"EPFO member portal, e-nomination",t:"20 min"},
+ NPS:{how:"CRA portal",t:"15 min"},
+ PPF:{how:"Branch form, mostly physical",t:"1 visit"},
+ PROP:{how:"Cannot be nominated — covered by the will",t:"—"},
+ GOLD:{how:"Cannot be nominated — covered by the will",t:"—"},
+ BIZ:{how:"Depends on the constitution documents",t:"—"},
+ LOAN:{how:"No nomination — note it in the will",t:"—"},
+ CRYPTO:{how:"No nomination — seed phrase access only",t:"—"}
+};
+
+var BANDS={"Under ₹5L":250000,"₹5–25L":1500000,"₹25L–1Cr":6250000,"Over ₹1Cr":15000000,"Prefer not to say":0};
+
+/* ---------- state ---------- */
+var S={
+ name:"",mobile:"",email:"",city:"",
+ age:"",marital:"",law:"",deps:[],minors:"",
+ cats:[],holdings:{},
+ will:"",willAge:"",guardian:"",docsKnown:"",joint:"",nri:"",
+ tName:"",tRel:"",tMobile:"",tShare:"",consent:false
+};
+var SAMPLE={
+ name:"Rohit Nair",mobile:"98450 00000",email:"",city:"Bengaluru",
+ age:"42",marital:"Married",law:"Hindu, Sikh, Jain or Buddhist",
+ deps:["Spouse","Children under 18","Parents"],minors:"Yes",
+ cats:["BANK","FD","DEMAT","MF","LIFE","EPF","PPF","PROP","GOLD"],
+ holdings:{
+  BANK:{inst:["HDFC Bank","SBI","ICICI Bank"],count:"2–3",nom:"No",rel:"—",band:"₹5–25L"},
+  FD:{inst:["SBI"],count:"1",nom:"Don't know",rel:"—",band:"₹5–25L"},
+  DEMAT:{inst:["Zerodha"],count:"1",nom:"Yes",rel:"Spouse",band:"₹25L–1Cr"},
+  MF:{inst:["CAMS","KFintech"],count:"4+",nom:"No",rel:"—",band:"₹25L–1Cr"},
+  LIFE:{inst:["LIC","HDFC Life"],count:"2–3",nom:"Yes",rel:"Parent",band:"₹25L–1Cr"},
+  EPF:{inst:["EPFO"],count:"2–3",nom:"No",rel:"—",band:"₹5–25L"},
+  PPF:{inst:["SBI"],count:"1",nom:"Don't know",rel:"—",band:"₹5–25L"},
+  PROP:{inst:["Flat","Ancestral property"],count:"2–3",nom:"—",rel:"—",band:"Over ₹1Cr"},
+  GOLD:{inst:["Bank locker"],count:"1",nom:"—",rel:"—",band:"₹5–25L"}
+ },
+ will:"No",willAge:"",guardian:"No",docsKnown:"No",joint:"Yes",nri:"No",
+ tName:"Meera Nair",tRel:"Spouse",tMobile:"98450 00001",tShare:"Yes",consent:true
+};
+
+/* ---------- helpers ---------- */
+function el(t,a,kids){
+  var e=document.createElement(t);
+  if(a)for(var k in a){ if(k==="html")e.innerHTML=a[k]; else if(k==="text")e.textContent=a[k]; else e.setAttribute(k,a[k]); }
+  (kids||[]).forEach(function(c){ if(c) e.appendChild(c); });
+  return e;
+}
+function inr(n){
+  n=Math.round(n);
+  var s=String(n), last3=s.slice(-3), rest=s.slice(0,-3);
+  if(rest) last3=","+last3;
+  rest=rest.replace(/\B(?=(\d{2})+(?!\d))/g,",");
+  return "₹"+rest+last3;
+}
+
+/* ---------- screen builders ---------- */
+function phaseFor(k){
+  if(k==="identity"||k==="about"||k==="deps") return "Who you are";
+  if(k==="cats"||k.indexOf("h-")===0) return "Your assets";
+  if(k==="legal") return "Legal readiness";
+  if(k==="trusted") return "Trusted person";
+  return "Journey";
+}
+function wrapScreen(eyebrow,title,help,bodyKids){
+  var shell=el("div",{class:"journey-shell"});
+  if(eyebrow) shell.appendChild(el("div",{class:"step-eyebrow",text:eyebrow}));
+  shell.appendChild(el("h2",{class:"q",text:title}));
+  if(help) shell.appendChild(el("p",{class:"q-help",text:help}));
+  (bodyKids||[]).forEach(function(n){ if(n) shell.appendChild(n); });
+  return shell;
+}
+function pick(label,key,opts,help,multi){
+  var f=el("div",{class:"field"});
+  if(label) f.appendChild(el("label",{text:label+(multi?" (pick all that apply)":"")}));
+  var box=el("div",{class: multi ? "choices" : (opts.length>5 ? "choice-grid" : "choices")});
+  opts.forEach(function(o){
+    var on = multi ? S[key].indexOf(o)>-1 : S[key]===o;
+    var b=el("button",{class:"choice",type:"button","aria-pressed":on?"true":"false",text:o});
+    b.onclick=function(){
+      if(multi){
+        var i=S[key].indexOf(o);
+        if(i>-1)S[key].splice(i,1); else S[key].push(o);
+        if(o==="Nobody" && S[key].indexOf("Nobody")>-1) S[key]=["Nobody"];
+        if(o!=="Nobody") S[key]=S[key].filter(function(x){return x!=="Nobody";});
+      } else { S[key]=o; }
+      render();
+    };
+    box.appendChild(b);
+  });
+  f.appendChild(box);
+  if(help) f.appendChild(el("p",{class:"hint",text:help}));
+  return f;
+}
+function pickCards(label,key,items,help){
+  var f=el("div",{class:"field"});
+  if(label) f.appendChild(el("label",{text:label}));
+  var box=el("div",{class:"choices",style:"flex-direction:column"});
+  items.forEach(function(it){
+    var on=S[key]===it.v;
+    var b=el("button",{class:"choice block",type:"button","aria-pressed":on?"true":"false"});
+    b.appendChild(el("span",{class:"ck",text:"✓"}));
+    var tx=el("span",{class:"tx"});
+    tx.appendChild(el("b",{text:it.v}));
+    if(it.s) tx.appendChild(el("small",{text:it.s}));
+    b.appendChild(tx);
+    b.onclick=function(){ S[key]=it.v; render(); };
+    box.appendChild(b);
+  });
+  f.appendChild(box);
+  if(help) f.appendChild(el("p",{class:"hint",text:help}));
+  return f;
+}
+function textField(label,key,ph,type,opt,quick){
+  var f=el("div",{class:"field"});
+  var l=el("label",{});
+  l.appendChild(document.createTextNode(label));
+  if(opt) l.appendChild(el("span",{class:"opt",text:"  optional"}));
+  f.appendChild(l);
+  var card=el("div",{class:"field-card"+(S[key]?" filled":"")});
+  var i=el("input",{type:type||"text",placeholder:ph||"",value:S[key]||"",autocomplete:"on"});
+  i.oninput=function(){
+    S[key]=i.value;
+    card.classList.toggle("filled", !!i.value.trim());
+    refreshNav();
+    var pill=document.querySelector('[data-live="'+key+'"]');
+    if(pill) pill.classList.toggle("on", !!i.value.trim());
+  };
+  card.appendChild(i);
+  f.appendChild(card);
+  if(quick&&quick.length){
+    var q=el("div",{class:"quick"});
+    quick.forEach(function(city){
+      var b=el("button",{type:"button",text:city});
+      b.onclick=function(){
+        S[key]=city; i.value=city; card.classList.add("filled");
+        refreshNav();
+        var pill=document.querySelector('[data-live="'+key+'"]');
+        if(pill) pill.classList.add("on");
+      };
+      q.appendChild(b);
+    });
+    f.appendChild(q);
+  }
+  return f;
+}
+
+function screenIdentity(){
+  var live=el("div",{class:"live-bar"});
+  [["name","Name"],["mobile","Mobile"],["city","City"]].forEach(function(x){
+    live.appendChild(el("span",{class:"live-pill"+(S[x[0]]?" on":""),"data-live":x[0],text:x[1]}));
+  });
+  return wrapScreen("Step · identity","Let's start with who you are",
+    "We send the report to this number on WhatsApp. Your city decides the court-fee rates we use later.",
+    [
+      live,
+      textField("Full name","name","As it appears on your PAN"),
+      textField("Mobile","mobile","10-digit mobile number","tel"),
+      textField("Email","email","you@email.com","email",true),
+      textField("City","city","Start typing or pick one","text",false,["Bengaluru","Mumbai","Delhi","Hyderabad","Chennai","Pune","Kolkata"])
+    ]);
+}
+function screenAbout(){
+  return wrapScreen("Step · situation","A little about your situation",
+    "Succession in India runs on personal law. We ask so the report applies the right one — nothing else.",
+    [
+      pick("Age band","age",["25–34","35–44","45–54","55–64","65+"]),
+      pick("Marital status","marital",["Single","Married","Widowed","Separated"]),
+      pickCards("For succession law purposes","law",[
+        {v:"Hindu, Sikh, Jain or Buddhist",s:"Hindu Succession Act path"},
+        {v:"Muslim",s:"Muslim personal law"},
+        {v:"Christian",s:"Indian Succession Act"},
+        {v:"Parsi",s:"Parsi personal law"},
+        {v:"Other",s:"We'll note this on the report"}
+      ])
+    ]);
+}
+function screenDeps(){
+  var count=el("div",{class:"sel-count",text:(S.deps.length||0)+" selected"});
+  return wrapScreen("Step · dependants","Who depends on you financially?",
+    "Pick everyone who would feel it if your income stopped tomorrow.",
+    [
+      count,
+      pick("","deps",["Spouse","Children under 18","Children 18+","Parents","Siblings","Nobody"],null,true),
+      pick("Are any of them minors?","minors",["Yes","No"],"If yes, we check whether a guardian is named anywhere — the highest-value upsell trigger.")
+    ]);
+}
+var catFilter="all";
+function screenCats(){
+  var sKids=[];
+  sKids.push(el("div",{class:"sel-count",text:S.cats.length+" categor"+(S.cats.length===1?"y":"ies")+" selected"}));
+  var filters=el("div",{class:"cat-filters"});
+  [["all","All"],["nom","Can nominate"],["will","Will / other"]].forEach(function(f){
+    var b=el("button",{type:"button",class:catFilter===f[0]?"on":"",text:f[1]});
+    b.onclick=function(){ catFilter=f[0]; render(); };
+    filters.appendChild(b);
+  });
+  sKids.push(filters);
+  var g=el("div",{class:"cats"});
+  CATS.forEach(function(c){
+    if(catFilter==="nom" && !c.nom) return;
+    if(catFilter==="will" && c.nom) return;
+    var on=S.cats.indexOf(c.c)>-1;
+    var b=el("button",{class:"cat",type:"button","aria-pressed":on?"true":"false"});
+    b.appendChild(el("span",{class:"ico",text:c.c.slice(0,2)}));
+    var w=el("span",{class:"body"});
+    w.appendChild(el("b",{text:c.n}));
+    if(c.s) w.appendChild(el("small",{text:c.s}));
+    b.appendChild(w);
+    b.appendChild(el("span",{class:"tick",text:"✓"}));
+    b.onclick=function(){
+      var i=S.cats.indexOf(c.c);
+      if(i>-1){ S.cats.splice(i,1); delete S.holdings[c.c]; }
+      else { S.cats.push(c.c); S.holdings[c.c]={inst:[""],count:"",nom:"",rel:"",band:"Prefer not to say"}; }
+      render();
+    };
+    g.appendChild(b);
+  });
+  sKids.push(g);
+  return wrapScreen("Step · checklist","Where is your money?",
+    "Tick everything you hold. Names come next — never account numbers, folios or balances.",
+    sKids);
+}
+function screenHolding(code){
+  var c=CATMAP[code], h=S.holdings[code];
+  var filled=0, need=2;
+  if(h.inst.some(function(x){return x&&x.trim();})) filled++;
+  if(h.count) filled++;
+  if(c.nom){ need=3; if(h.nom) filled++; if(h.nom==="Yes"&&h.rel) { need=4; if(h.rel) filled++; } }
+  var head=el("div",{class:"holding-head"});
+  head.appendChild(el("span",{class:"holding-badge",text:filled+" / "+need+" answered"}));
+
+  var kids=[head];
+  var f=el("div",{class:"field"});
+  f.appendChild(el("label",{text:"Institution names"}));
+  var tips=el("div",{class:"chip-row"});
+  (INST[code]||[]).forEach(function(name){
+    var used=h.inst.some(function(x){return (x||"").toLowerCase()===name.toLowerCase();});
+    var b=el("button",{type:"button",class:used?"used":"",text:"+ "+name});
+    b.onclick=function(){
+      if(h.inst.length===1 && !h.inst[0].trim()) h.inst[0]=name;
+      else if(h.inst.length<5) h.inst.push(name);
+      render();
+    };
+    tips.appendChild(b);
+  });
+  f.appendChild(tips);
+  var block=el("div",{class:"inst-block"});
+  h.inst.forEach(function(v,idx){
+    var row=el("div",{class:"instrow"});
+    var card=el("div",{class:"field-card"+(v?" filled":"")});
+    var inp=el("input",{type:"text",list:"dl-"+code,value:v,placeholder:(INST[code]&&INST[code][0])||"Institution name"});
+    inp.oninput=function(){ h.inst[idx]=inp.value; card.classList.toggle("filled", !!inp.value.trim()); refreshNav(); };
+    card.appendChild(inp);
+    row.appendChild(card);
+    if(h.inst.length>1){
+      var x=el("button",{class:"xbtn",type:"button",title:"Remove",text:"×"});
+      x.onclick=function(){ h.inst.splice(idx,1); render(); };
+      row.appendChild(x);
+    }
+    block.appendChild(row);
+  });
+  f.appendChild(block);
+  var dl=el("datalist",{id:"dl-"+code});
+  (INST[code]||[]).forEach(function(o){ dl.appendChild(el("option",{value:o})); });
+  f.appendChild(dl);
+  if(h.inst.length<5){
+    var add=el("button",{class:"linkbtn",type:"button",text:"+ Add another institution"});
+    add.onclick=function(){ h.inst.push(""); render(); };
+    f.appendChild(add);
+  }
+  kids.push(f);
+
+  kids.push(sub("Roughly how many accounts here?","count",["1","2–3","4+"],h));
+  if(c.nom){
+    kids.push(sub("Is a nominee registered?","nom",["Yes","No","Don't know"],h));
+    if(h.nom==="Yes") kids.push(sub("Who is the nominee?","rel",["Spouse","Child","Parent","Sibling","Other"],h));
+  } else {
+    kids.push(el("div",{class:"notice",text:"Nomination is not available here. It passes through your will — or succession law if there isn't one."}));
+  }
+  kids.push(sub("Approximate value band","band",["Under ₹5L","₹5–25L","₹25L–1Cr","Over ₹1Cr","Prefer not to say"],h));
+  kids.push(el("p",{class:"hint",text:"Bands only, never a figure. Skip it and we leave the cost estimate out of your report."}));
+
+  return wrapScreen("Holding · "+code,c.n,"Names only — never an account, folio or policy number.",kids);
+}
+function sub(label,key,opts,h){
+  var f=el("div",{class:"field"});
+  f.appendChild(el("label",{text:label}));
+  var box=el("div",{class:opts.length>4?"choice-grid":"choices"});
+  opts.forEach(function(o){
+    var b=el("button",{class:"choice",type:"button","aria-pressed":h[key]===o?"true":"false",text:o});
+    b.onclick=function(){ h[key]=o; render(); };
+    box.appendChild(b);
+  });
+  f.appendChild(box);
+  return f;
+}
+function screenLegal(){
+  return wrapScreen("Step · legal","Where do you stand legally?",
+    "A nominee holds an asset. A will decides who owns it. Most families find out the difference at the worst moment.",
+    [
+      pickCards("Do you have a will?","will",[
+        {v:"No",s:"We'll flag succession-only paths"},
+        {v:"Written but unsigned",s:"Does not exist in law yet"},
+        {v:"Signed, not registered",s:"Valid, but harder to prove"},
+        {v:"Signed and registered",s:"Strongest form"}
+      ]),
+      (S.will==="Signed, not registered"||S.will==="Signed and registered")
+        ? pick("When did you last update it?","willAge",["Within 2 years","2–5 years","Over 5 years","Don't remember"])
+        : null,
+      S.minors==="Yes" ? pick("Is a guardian named for your children?","guardian",["Yes","No"]) : null,
+      pick("Does anyone know where your documents are kept?","docsKnown",["Yes","No"]),
+      pick("Any jointly held assets?","joint",["Yes","No","Not sure"]),
+      pick("Any heirs living outside India?","nri",["Yes","No"])
+    ].filter(Boolean));
+}
+function screenTrusted(){
+  var consent=el("div",{class:"consent"+(S.consent?" on":""),id:"consentBox"});
+  var cb=el("input",{type:"checkbox",id:"consent"});
+  cb.checked=S.consent;
+  function sync(){ S.consent=cb.checked; consent.classList.toggle("on", cb.checked); refreshNav(); }
+  cb.onchange=sync;
+  consent.onclick=function(e){ if(e.target===cb) return; cb.checked=!cb.checked; sync(); };
+  consent.appendChild(cb);
+  consent.appendChild(el("label",{for:"consent",html:"I agree to SurakshaOne storing these answers to prepare this report. We hold institution names and nomination status only — never account numbers, PAN or balances. Ask us to delete anytime; inactive records are purged after 36 months."}));
+
+  return wrapScreen("Step · trusted person","Who would handle all of this?",
+    "One person. They get the last page of your report — the institution list and the first five steps. Only if you say so.",
+    [
+      textField("Their name","tName","Full name"),
+      pick("Their relationship to you","tRel",["Spouse","Child","Parent","Sibling","Friend","Other"]),
+      textField("Their mobile","tMobile","10-digit mobile","tel"),
+      pick("Send them the one-page summary?","tShare",["Yes","No"],"We do not contact them unless you say yes."),
+      consent
+    ]);
+}
+
+/* ---------- flow ---------- */
+function steps(){
+  var out=[
+    {k:"identity",b:screenIdentity,ok:function(){return S.name&&S.mobile&&S.city;}},
+    {k:"about",   b:screenAbout,   ok:function(){return S.age&&S.marital&&S.law;}},
+    {k:"deps",    b:screenDeps,    ok:function(){return S.deps.length&&S.minors;}},
+    {k:"cats",    b:screenCats,    ok:function(){return S.cats.length>0;}}
+  ];
+  CATS.forEach(function(c){
+    if(S.cats.indexOf(c.c)>-1) out.push({
+      k:"h-"+c.c,
+      b:function(){return screenHolding(c.c);},
+      ok:(function(code){return function(){
+        var h=S.holdings[code];
+        return h && h.inst.some(function(x){return x.trim();}) && h.count && (!CATMAP[code].nom || h.nom);
+      };})(c.c)
+    });
+  });
+  out.push({k:"legal",b:screenLegal,ok:function(){
+    return S.will && S.docsKnown && S.joint && S.nri && (S.minors!=="Yes"||S.guardian);
+  }});
+  out.push({k:"trusted",b:screenTrusted,ok:function(){ return S.tName&&S.tRel&&S.tShare&&S.consent; }});
+  return out;
+}
+var step=0;
+
+function render(){
+  var st=steps();
+  if(step>=st.length) step=st.length-1;
+  var host=document.getElementById("screens");
+  host.innerHTML="";
+  var s=el("div",{class:"screen on"});
+  s.appendChild(st[step].b());
+
+  var nav=el("div",{class:"navrow"});
+  if(step>0){
+    var back=el("button",{class:"btn ghost",type:"button",text:"Back"});
+    back.onclick=function(){ step--; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    nav.appendChild(back);
+  }
+  nav.appendChild(el("div",{class:"spacer"}));
+  var ready=st[step].ok();
+  if(!ready) nav.appendChild(el("span",{class:"nav-hint",text:"Complete this step to continue"}));
+  var last=step===st.length-1;
+  var next=el("button",{class:"btn",type:"button",id:"nextBtn",text:last?"Generate my report":"Continue"});
+  next.disabled=!ready;
+  next.onclick=function(){
+    if(last){ buildReport(S,false); show("report"); window.scrollTo({top:0,behavior:"smooth"}); }
+    else { step++; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+  };
+  nav.appendChild(next);
+  s.appendChild(nav);
+  host.appendChild(s);
+
+  var pct=Math.round(((step+1)/st.length)*100);
+  document.getElementById("pfill").style.width=pct+"%";
+  document.getElementById("plabel").textContent="Step "+(step+1)+" of "+st.length;
+  var phase=document.getElementById("pphase");
+  if(phase) phase.textContent=phaseFor(st[step].k);
+}
+function refreshNav(){
+  var st=steps(), b=document.getElementById("nextBtn");
+  if(b) b.disabled=!st[step].ok();
+  var hint=document.querySelector(".nav-hint");
+  if(hint) hint.style.display = st[step].ok() ? "none" : "";
+}
+
+/* ---------- scoring ---------- */
+function score(d){
+  var elig=[],gaps=[],covered=[];
+  d.cats.forEach(function(c){
+    if(!CATMAP[c].nom) return;
+    var h=d.holdings[c]; if(!h) return;
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(name){
+      var rec={cat:c,name:name,nom:h.nom,rel:h.rel,band:h.band};
+      elig.push(rec);
+      if(h.nom==="Yes") covered.push(rec); else gaps.push(rec);
+    });
+  });
+  var movable=0,anyBand=false;
+  d.cats.forEach(function(c){
+    if(!CATMAP[c].nom) return;
+    var h=d.holdings[c]; if(!h||!h.band) return;
+    var v=BANDS[h.band]||0;
+    if(v){ anyBand=true; movable+=v; }
+  });
+  var flags=[];
+  if(d.minors==="Yes"&&d.guardian==="No") flags.push("Your children are minors and no guardian is named anywhere. A court would decide.");
+  var big=null,bigv=-1;
+  elig.forEach(function(r){ var v=BANDS[r.band]||0; if(v>bigv){bigv=v;big=r;} });
+  if(big&&big.nom==="Yes"&&big.rel&&big.rel!=="Spouse"&&d.deps.indexOf("Spouse")>-1)
+    flags.push("Your largest holding names a "+big.rel.toLowerCase()+" as nominee, while your spouse depends on you. Those two do not have to agree, and often don't.");
+  if(d.will==="Written but unsigned") flags.push("Your will is written but unsigned, which means it does not exist in law.");
+  if(d.willAge==="Over 5 years"||d.willAge==="Don't remember") flags.push("Your will is over five years old. Assets bought since then may not be covered by it.");
+  if((d.cats.indexOf("PROP")>-1||d.cats.indexOf("BIZ")>-1)&&d.will==="No")
+    flags.push("You hold property or a business stake and have no will. Neither can be nominated, so both go to succession law.");
+  if(d.docsKnown==="No") flags.push("Nobody knows where your documents are kept.");
+  if(d.nri==="Yes"&&d.will==="No") flags.push("You have heirs outside India and no will, which adds months to every claim.");
+
+  var lo=0,hi=0;
+  if(anyBand){
+    lo=Math.min(movable*0.02,75000)+45000;
+    hi=Math.min(movable*0.03,75000)+45000;
+    if(hi<=lo) hi=lo*1.2;
+  }
+  return {elig:elig,gaps:gaps,covered:covered,flags:flags,movable:movable,anyBand:anyBand,lo:lo,hi:hi};
+}
+
+/* ---------- report ---------- */
+function buildReport(d,isSample){
+  var r=score(d), host=document.getElementById("report");
+  host.innerHTML="";
+  document.getElementById("src-chip").textContent = isSample
+    ? "Sample · Rohit Nair, Bengaluru"
+    : "Generated from your answers";
+
+  var totalInst=0;
+  d.cats.forEach(function(c){
+    var h=d.holdings[c]; if(!h) return;
+    totalInst += h.inst.filter(function(x){return x&&x.trim();}).length;
+  });
+  var pct = r.elig.length ? Math.round((r.gaps.length/r.elig.length)*100) : 0;
+
+  /* hero */
+  var hero=el("div",{class:"rpt-hero"});
+  var main=el("div",{class:"rpt-hero-main"});
+  main.appendChild(el("div",{class:"eyebrow",text:"LifeSecure · six-page map"}));
+  main.appendChild(el("h2",{text:"Prepared for "+(d.name||"—")}));
+  main.appendChild(el("p",{text:"Institution names and nomination status only. No account numbers, policy numbers or balances — by design."}));
+  var meta=el("div",{class:"meta"});
+  meta.appendChild(el("span",{text:d.city||"City —"}));
+  meta.appendChild(el("span",{text:totalInst+" institutions mapped"}));
+  meta.appendChild(el("span",{text:r.flags.length+" red flags"}));
+  main.appendChild(meta);
+  hero.appendChild(main);
+
+  var ringCard=el("div",{class:"gap-ring-card"});
+  var ring=el("div",{class:"gap-ring"+(r.gaps.length?"":" clean"),style:"--pct:"+pct});
+  var inner=el("div",{class:"inner"});
+  inner.appendChild(el("b",{text:String(r.gaps.length)}));
+  inner.appendChild(el("span",{text:"gaps"}));
+  ring.appendChild(inner);
+  ringCard.appendChild(ring);
+  ringCard.appendChild(el("div",{class:"caption",
+    text: r.gaps.length
+      ? r.gaps.length+" of "+r.elig.length+" nomination-eligible institutions"
+      : "Clean map — every eligible institution has a nominee"}));
+  hero.appendChild(ringCard);
+  host.appendChild(hero);
+
+  /* 1 asset map */
+  var s1=el("section",{class:"rpt-sec",id:"rpt-map"});
+  var h1=el("div",{class:"rpt-sec-head"});
+  h1.appendChild(el("h3",{text:"Your asset map"}));
+  h1.appendChild(el("span",{class:"pg",text:"Page 1 of 6"}));
+  s1.appendChild(h1);
+  var sheet1=el("div",{class:"sheet"});
+  sheet1.appendChild(el("p",{class:"lead",text:"Every institution you named, grouped by category. Green means a nominee is on record. Red means a gap — or you don't know, which counts as a gap."}));
+  var grid=el("div",{class:"map-grid"});
+  d.cats.forEach(function(c){
+    var h=d.holdings[c]; if(!h) return;
+    var card=el("div",{class:"map-card"});
+    card.appendChild(el("h4",{text:CATMAP[c].n}));
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(name){
+      var row=el("div",{class:"map-row"});
+      row.appendChild(el("span",{class:"nm",text:name}));
+      if(!CATMAP[c].nom) row.appendChild(el("span",{class:"st na",text:"Will only"}));
+      else if(h.nom==="Yes") row.appendChild(el("span",{class:"st yes",text:h.rel||"Nominee ✓"}));
+      else row.appendChild(el("span",{class:"st no",text:h.nom==="Don't know"?"Unknown":"No nominee"}));
+      card.appendChild(row);
+    });
+    grid.appendChild(card);
+  });
+  sheet1.appendChild(grid);
+  s1.appendChild(sheet1);
+  host.appendChild(s1);
+
+  /* 2 gap score + flags */
+  var s2=el("section",{class:"rpt-sec",id:"rpt-gaps"});
+  var h2=el("div",{class:"rpt-sec-head"});
+  h2.appendChild(el("h3",{text:"Your gap score"}));
+  h2.appendChild(el("span",{class:"pg",text:"Page 2 of 6"}));
+  s2.appendChild(h2);
+  var sheet2=el("div",{class:"sheet"});
+  sheet2.appendChild(el("p",{class:"lead",text: r.gaps.length
+    ? r.gaps.length+" of your "+r.elig.length+" institutions have no nominee on record. Ranked below by what it would cost your family — not by asset size."
+    : "Zero gaps on nomination-eligible assets. The remaining work lives in your will."}));
+  if(r.flags.length){
+    var stack=el("div",{class:"flag-stack"});
+    r.flags.slice(0,5).forEach(function(f,i){
+      var card=el("div",{class:"flag-card"});
+      card.appendChild(el("div",{class:"ix",text:String(i+1)}));
+      card.appendChild(el("p",{text:f}));
+      stack.appendChild(card);
+    });
+    sheet2.appendChild(stack);
+    sheet2.appendChild(el("p",{class:"flag-note",text:"These print above the gap count regardless of how many institutions are clean."}));
+  } else {
+    sheet2.appendChild(el("p",{class:"lead",text:"No red flags from your current answers."}));
+  }
+  s2.appendChild(sheet2);
+  host.appendChild(s2);
+
+  /* 3 impact */
+  var s3=el("section",{class:"rpt-sec",id:"rpt-impact"});
+  var h3=el("div",{class:"rpt-sec-head"});
+  h3.appendChild(el("h3",{text:"What your family would face"}));
+  h3.appendChild(el("span",{class:"pg",text:"Page 3 of 6"}));
+  s3.appendChild(h3);
+  var sheet3=el("div",{class:"sheet"});
+  if(r.anyBand){
+    sheet3.appendChild(el("p",{class:"lead",text:"If you died this week — fees and waiting time before they can touch what you left them."}));
+    var ig=el("div",{class:"impact-grid"});
+    var c1=el("div",{class:"impact-card"});
+    c1.appendChild(el("div",{class:"lbl",text:"Estimated fees"}));
+    c1.appendChild(el("div",{class:"val",text:inr(r.lo)+" – "+inr(r.hi)}));
+    c1.appendChild(el("div",{class:"sub",text:"Court fees + professional costs"}));
+    var c2=el("div",{class:"impact-card"});
+    c2.appendChild(el("div",{class:"lbl",text:"Time without access"}));
+    c2.appendChild(el("div",{class:"val",text:r.gaps.length?"6–12 months":"1–3 months"}));
+    c2.appendChild(el("div",{class:"sub",text:"Before assets are in their hands"}));
+    ig.appendChild(c1); ig.appendChild(c2);
+    sheet3.appendChild(ig);
+    sheet3.appendChild(el("p",{text:"Where no nominee is on record, institutions usually ask for a succession certificate. Court fees run 2–3% of movable estate in most states (often capped near ₹75,000); professional fees add around ₹45,000."}));
+    sheet3.appendChild(el("p",{class:"assume",text:"Assumes movable assets around "+inr(r.movable)+" from the bands you picked. A nominated asset with a clean will can transmit in weeks — that is the point of the fix list."}));
+  } else {
+    sheet3.appendChild(el("p",{class:"lead",text:"You chose not to share value bands, so the rupee estimate is left out rather than invented."}));
+    sheet3.appendChild(el("p",{text:"Without nominees, families usually need a succession certificate: 2–3% court fees, ~₹45,000 professional fees, and months of waiting. Reply on WhatsApp with rough bands and we will cost this page."}));
+  }
+  s3.appendChild(sheet3);
+  host.appendChild(s3);
+
+  /* 4 fix list */
+  var s4=el("section",{class:"rpt-sec",id:"rpt-fix"});
+  var h4=el("div",{class:"rpt-sec-head"});
+  h4.appendChild(el("h3",{text:"Your fix list"}));
+  h4.appendChild(el("span",{class:"pg",text:"Page 4 of 6"}));
+  s4.appendChild(h4);
+  var sheet4=el("div",{class:"sheet"});
+  if(r.gaps.length){
+    sheet4.appendChild(el("p",{class:"lead",text:"Easiest first. Most people close four or five of these in one evening — free, without us."}));
+    var fixes=r.gaps.slice().sort(function(a,b){ return (METHOD[a.cat].t.length)-(METHOD[b.cat].t.length); });
+    var fg=el("div",{class:"fix-grid"});
+    fixes.forEach(function(g,i){
+      var card=el("div",{class:"fix-card"});
+      card.appendChild(el("div",{class:"n",text:String(i+1)}));
+      var body=el("div",{class:"body"});
+      body.appendChild(el("b",{text:"Add a nominee at "+g.name}));
+      body.appendChild(el("span",{text:METHOD[g.cat].how}));
+      card.appendChild(body);
+      card.appendChild(el("div",{class:"time",text:"~ "+METHOD[g.cat].t}));
+      fg.appendChild(card);
+    });
+    sheet4.appendChild(fg);
+    var noWill=(d.cats.indexOf("PROP")>-1||d.cats.indexOf("GOLD")>-1||d.cats.indexOf("BIZ")>-1)&&d.will==="No";
+    if(noWill) sheet4.appendChild(el("p",{class:"fix-note",text:"Property, gold and business stakes cannot be nominated. Only a will covers them — the one item you cannot finish in an evening alone."}));
+  } else {
+    sheet4.appendChild(el("p",{class:"lead",text:"Nothing to fix on nominations. Every institution that can carry a nominee has one."}));
+    sheet4.appendChild(el("p",{text:"The remaining work is your will — the only instrument that covers property, gold and business stakes, and that says who ultimately owns what a nominee is merely holding."}));
+  }
+  s4.appendChild(sheet4);
+  host.appendChild(s4);
+
+  /* 5 tools */
+  var s5=el("section",{class:"rpt-sec",id:"rpt-tools"});
+  var h5=el("div",{class:"rpt-sec-head"});
+  h5.appendChild(el("h3",{text:"Free tools you should use first"}));
+  h5.appendChild(el("span",{class:"pg",text:"Page 5 of 6"}));
+  s5.appendChild(h5);
+  var sheet5=el("div",{class:"sheet"});
+  sheet5.appendChild(el("p",{class:"lead",text:"None of these cost anything and none involve us. Use them before you pay anyone — including us."}));
+  var tg=el("div",{class:"tools-grid"});
+  [["DL","DigiLocker Data Access Nominee","Name a nominee who is notified on death and gets read-only demat, MF and CAS access."],
+   ["UD","RBI UDGAM","Search dormant deposits across participating banks — useful for old parental accounts."],
+   ["MT","SEBI MITRA","Find mutual fund folios with no investor activity in ten years."],
+   ["BB","IRDAI Bima Bharosa","Central search for unclaimed amounts across life, general and health insurers."]
+  ].forEach(function(t){
+    var card=el("div",{class:"tool-card"});
+    card.appendChild(el("div",{class:"ico",text:t[0]}));
+    card.appendChild(el("b",{text:t[1]}));
+    card.appendChild(el("span",{text:t[2]}));
+    tg.appendChild(card);
+  });
+  sheet5.appendChild(tg);
+  s5.appendChild(sheet5);
+  host.appendChild(s5);
+
+  /* 6 handover */
+  var s6=el("section",{class:"rpt-sec",id:"rpt-handover"});
+  var h6=el("div",{class:"rpt-sec-head"});
+  h6.appendChild(el("h3",{text:"If something happens"}));
+  h6.appendChild(el("span",{class:"pg",text:"Page 6 of 6"}));
+  s6.appendChild(h6);
+  var ho=el("div",{class:"handover"});
+  var top=el("div",{class:"handover-top"});
+  top.appendChild(el("div",{class:"eyebrow",text:"Printable handover"}));
+  top.appendChild(el("h3",{text:"For "+(d.tName||"—")+(d.tRel?", "+d.tRel.toLowerCase():"")}));
+  top.appendChild(el("p",{text:"Keep this somewhere they can find it. First five steps only — no account numbers, by design."}));
+  ho.appendChild(top);
+  var body=el("div",{class:"handover-body"});
+  var names=[];
+  d.cats.forEach(function(c){
+    var h=d.holdings[c]; if(!h) return;
+    h.inst.filter(function(x){return x&&x.trim();}).forEach(function(n){ names.push(n+" ("+CATMAP[c].n.toLowerCase()+")"); });
+  });
+  body.appendChild(el("p",{class:"inst",text:(d.name||"This person")+" held money or documents with: "+names.join("; ")+"."}));
+  body.appendChild(el("p",{class:"note",text:"There are no account numbers here. Each institution supplies details against a death certificate."}));
+  var ol=el("ol",{class:"handover-steps"});
+  ["Get at least eight certified copies of the death certificate. Every institution keeps one.",
+   "Call each institution and ask for its transmission or death-claim form. Start with the bank.",
+   "Where a nominee is registered, the nominee applies directly — no court.",
+   "Where none is registered, ask in writing what is required. Do not go to court until told it is unavoidable.",
+   "Search UDGAM, MITRA and Bima Bharosa for anything never mentioned."
+  ].forEach(function(t){ ol.appendChild(el("li",{text:t})); });
+  body.appendChild(ol);
+  body.appendChild(el("div",{class:"stamp",text:"SurakshaOne · LifeSecure · Adrika"}));
+  ho.appendChild(body);
+  s6.appendChild(ho);
+  host.appendChild(s6);
+}
+
+/* ---------- views ---------- */
+function show(v){
+  ["journey","report","plans"].forEach(function(x){
+    document.getElementById("view-"+x).hidden = (x!==v);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
+    t.setAttribute("aria-selected", t.dataset.view===v ? "true":"false");
+  });
+}
+Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
+  t.onclick=function(){ show(t.dataset.view); window.scrollTo(0,0); };
+});
+document.getElementById("loadSample").onclick=function(){
+  buildReport(SAMPLE,true); window.scrollTo(0,0);
+};
+var params=new URLSearchParams(location.search);
+if(params.get("view")==="plans" || location.hash==="#plans") show("plans");
+else if(params.get("view")==="report" || location.hash==="#report") show("report");
+
+/* ---------- boot ---------- */
+render();
+buildReport(SAMPLE,true);
+})();
+</script>
+</body>
+</html>

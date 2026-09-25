@@ -4,6 +4,13 @@ import howSource from '../How it works.txt?raw'
 import protectionSource from '../Protection.txt?raw'
 import employersSource from '../for exployers.txt?raw'
 import comingSoonSource from '../Coming soon.txt?raw'
+import loginSource from '../Member login.txt?raw'
+import memberSource from '../Member home.txt?raw'
+
+const AUTH_KEY = 'suraksha_member'
+const AUTH_NAME_KEY = 'suraksha_member_name'
+const DEMO_USER = 'demo'
+const DEMO_PASSWORD = 'lifesecure'
 
 const pages = {
   '/': homeSource,
@@ -18,8 +25,10 @@ const pages = {
   '/coming-soon.html': comingSoonSource,
   '/signup': comingSoonSource,
   '/signup.html': comingSoonSource,
-  '/login': comingSoonSource,
-  '/login.html': comingSoonSource,
+  '/login': loginSource,
+  '/login.html': loginSource,
+  '/member': memberSource,
+  '/member.html': memberSource,
 }
 
 const BASE_URL = import.meta.env.BASE_URL
@@ -61,6 +70,7 @@ function normaliseMarkup(markup) {
     .replaceAll('href="coming-soon.html', `href="${withBase('/coming-soon')}`)
     .replaceAll('href="signup.html', `href="${withBase('/signup')}`)
     .replaceAll('href="login.html', `href="${withBase('/login')}`)
+    .replaceAll('href="member.html', `href="${withBase('/member')}`)
 }
 
 function rebaseImageAssets(markup) {
@@ -107,27 +117,60 @@ function setupInteractions(root, path = '/') {
 
   const isSignup = path === '/signup' || path === '/signup.html'
   const isLogin = path === '/login' || path === '/login.html'
-  if (isSignup || isLogin) {
+  if (isSignup) {
     const badge = q('#soonBadge')
     const title = q('#soonTitle')
     const lead = q('#soonLead')
     const note = q('#soonNote')
-    if (badge) badge.textContent = isSignup ? 'Sign up' : 'Log in'
-    if (title) {
-      title.innerHTML = isSignup
-        ? 'Sign up is <em>coming soon</em>.'
-        : 'Log in is <em>coming soon</em>.'
-    }
+    if (badge) badge.textContent = 'Sign up'
+    if (title) title.innerHTML = 'Sign up is <em>coming soon</em>.'
     if (lead) {
-      lead.textContent = isSignup
-        ? 'Member accounts are almost ready. Create your SurakshaOne account on the web — one login for consultations, exposure checks, travel help, household tools and ParentCare.'
-        : 'Member login is almost ready. Sign in on the web to your SurakshaOne dashboard — consultations, exposure checks, travel help, household tools and ParentCare in one place.'
+      lead.textContent =
+        'Member accounts are almost ready. Create your SurakshaOne account on the web — one login for consultations, exposure checks, travel help, household tools and ParentCare.'
     }
     if (note) {
-      note.textContent = isSignup
-        ? 'Exploring plans in the meantime? See pricing on the home page, or talk to us there.'
-        : "Already curious about what's included? Browse Protection and pricing while we finish login."
+      note.textContent =
+        'Exploring plans in the meantime? See pricing on the home page, or talk to us there.'
     }
+  }
+
+  const loginForm = q('#memberLogin')
+  const loginError = q('#loginError')
+  addListener(
+    loginForm,
+    'submit',
+    (event) => {
+      event.preventDefault()
+      const id = (q('#loginId')?.value || '').trim().toLowerCase()
+      const password = q('#loginPassword')?.value || ''
+      if (id === DEMO_USER && password === DEMO_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, '1')
+        sessionStorage.setItem(AUTH_NAME_KEY, 'Demo Member')
+        window.location.assign(withBase('/member'))
+        return
+      }
+      loginError?.classList.add('on')
+    },
+    undefined,
+    cleanups,
+  )
+
+  const logoutBtn = q('#memberLogout')
+  addListener(
+    logoutBtn,
+    'click',
+    () => {
+      sessionStorage.removeItem(AUTH_KEY)
+      sessionStorage.removeItem(AUTH_NAME_KEY)
+      window.location.assign(withBase('/login'))
+    },
+    undefined,
+    cleanups,
+  )
+  const hello = q('#memberHello')
+  if (hello) {
+    const name = sessionStorage.getItem(AUTH_NAME_KEY) || 'Member'
+    hello.textContent = `Signed in as ${name}`
   }
 
   const navToggle = q('#navToggle')
@@ -549,12 +592,27 @@ function App() {
   const page = useMemo(() => parsePage(source), [source])
 
   useEffect(() => {
+    const memberPaths = path === '/member' || path === '/member.html'
+    const loginPaths = path === '/login' || path === '/login.html'
+    const authed = sessionStorage.getItem(AUTH_KEY) === '1'
+    if (memberPaths && !authed) {
+      window.location.replace(withBase('/login'))
+      return
+    }
+    if (loginPaths && authed) {
+      window.location.replace(withBase('/member'))
+    }
+  }, [path])
+
+  useEffect(() => {
     const authTitle =
       path === '/signup' || path === '/signup.html'
         ? 'Sign up — Coming soon | SurakshaOne'
         : path === '/login' || path === '/login.html'
-          ? 'Log in — Coming soon | SurakshaOne'
-          : null
+          ? 'Log in | SurakshaOne'
+          : path === '/member' || path === '/member.html'
+            ? 'Member home | SurakshaOne'
+            : null
     document.title = authTitle || page.title
     let description = document.querySelector('meta[name="description"]')
     if (!description) {
