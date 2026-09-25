@@ -484,10 +484,24 @@ h3.sub{font-size:17px;font-weight:600;margin:34px 0 10px}
 @media (max-width:720px){
   .plan-grid{grid-template-columns:1fr}
   .rule-grid{grid-template-columns:1fr}
-  .signal-row{grid-template-columns:1fr;gap:10px}
+  .signal-row{grid-template-columns:1fr;gap:10px;text-align:center;justify-items:center}
   .signal-row .arrow{display:none}
-  .signal-row .to{text-align:left}
-  .plans-hero{padding:22px 18px}
+  .signal-row .to{text-align:center}
+  .plans-hero{
+    padding:22px 18px;text-align:center;justify-content:center;flex-direction:column;align-items:center;
+  }
+  .plans-hero .eyebrow{justify-content:center}
+  .plans-hero p{margin-left:auto;margin-right:auto}
+  .plans-hero .free-pill{align-self:center;width:100%;max-width:240px}
+  .plan-card{text-align:center;align-items:center}
+  .plan-card .tag{align-self:center}
+  .plan-card .desc{margin-left:auto;margin-right:auto}
+  .plan-meta{width:100%;text-align:center}
+  .plan-meta .val{text-align:center}
+  .section-block{text-align:center}
+  .section-block .lede{margin-left:auto;margin-right:auto}
+  .rule-card{text-align:center}
+  .rule-card .n{margin-left:auto;margin-right:auto}
 }
 
 @media (max-width:720px){
