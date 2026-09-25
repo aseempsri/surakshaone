@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming soon — SurakshaOne</title>
+<meta name="description" content="Member sign up and login are coming soon. SurakshaOne will run entirely on the web — one account for all five protections.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111826; --ink-soft:#666c78; --mute:#8b919c;
+    --teal-deep:#2c5fdd; --teal:#00b0d6; --coral:#e7000b; --blue:#2c5fdd;
+    --brand-blue:#2c5fdd; --brand-blue-deep:#3738ac; --brand-cyan:#00b0d6;
+    --paper:#ffffff; --paper-2:#f2f5fb;
+    --line:#e5e8ed; --line-2:rgba(17,24,38,.08);
+    --sh:0 8px 28px rgba(44,95,221,.10);
+    --sh-lg:0 24px 60px rgba(44,95,221,.14);
+    --r:20px; --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Inter',system-ui,sans-serif;margin:0;line-height:1.12;letter-spacing:-.02em;font-weight:700}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button{font-family:inherit;cursor:pointer}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);font-weight:500;margin-bottom:18px}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan))}
+  .btn{display:inline-block;padding:14px 26px;border-radius:100px;font-weight:600;font-size:15px;border:1px solid transparent;transition:transform .15s,box-shadow .15s,background .15s}
+  .btn-p{background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));color:#fff;box-shadow:0 10px 28px rgba(44,95,221,.28)}
+  .btn-p:hover{box-shadow:0 14px 34px rgba(44,95,221,.34);transform:translateY(-2px)}
+  .btn-g{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-g:hover{border-color:var(--ink);background:var(--paper-2)}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .navbar{max-width:var(--maxw);margin:0 auto;padding:13px 28px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{height:34px;width:auto}
+  .brand-name{font-weight:700;font-size:19px}
+  .brand-name b{color:var(--teal-deep)}
+  .nav-links{display:flex;align-items:center;gap:30px;margin-left:auto}
+  .nav-links > a,.has-dd > a{font-size:14.5px;font-weight:500;color:var(--ink-soft)}
+  .nav-links > a:hover,.has-dd > a:hover{color:var(--ink)}
+  .nav-right{display:flex;align-items:center;gap:14px;margin-left:28px}
+  .nav-login{font-size:14.5px;font-weight:600;color:var(--ink-soft)}
+  .nav-login:hover{color:var(--ink)}
+  .nav-cta{padding:10px 20px;border-radius:100px;background:linear-gradient(135deg,var(--brand-blue-deep),var(--brand-blue) 55%,var(--brand-cyan));color:#fff;font-size:14px;font-weight:600;box-shadow:0 8px 22px rgba(44,95,221,.28)}
+  .nav-toggle{display:none;background:none;border:none;padding:6px}
+  .nav-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px}
+  .has-dd{position:relative}
+  .dd{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:8px;width:290px;opacity:0;visibility:hidden;transition:.15s}
+  .has-dd:hover .dd,.has-dd:focus-within .dd{opacity:1;visibility:visible;transform:translateX(-50%) translateY(2px)}
+  .dd a{display:flex;gap:11px;align-items:flex-start;padding:10px;border-radius:9px;font-size:13.5px;font-weight:600}
+  .dd a:hover{background:var(--paper-2)}
+  .dd a i{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+  .dd a em{display:block;font-style:normal;font-weight:400;font-size:12px;color:var(--ink-soft);margin-top:1px}
+  @media (max-width:960px){
+    .nav-links{position:fixed;inset:60px 0 auto 0;background:#fff;flex-direction:column;align-items:flex-start;gap:0;padding:8px 28px 20px;border-bottom:1px solid var(--line);transform:translateY(-150%);transition:transform .25s;box-shadow:var(--sh);max-height:calc(100vh - 60px);overflow-y:auto;margin-left:0}
+    .nav-links.open{transform:translateY(0)}
+    .nav-links > a,.has-dd{width:100%;border-bottom:1px solid var(--line-2)}
+    .nav-links > a{padding:13px 0}
+    .has-dd > a{display:block;padding:13px 0}
+    .dd{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;width:100%;display:none;padding:0 0 8px 10px}
+    .has-dd.open .dd{display:block}
+    .nav-toggle{display:block}
+    .nav-right{gap:10px;margin-left:10px}
+    .nav-cta{padding:8px 14px;font-size:13px}
+    .nav-login{font-size:13px}
+  }
+  .soon{
+    min-height:calc(100vh - 220px);
+    display:flex;align-items:center;justify-content:center;
+    padding:72px 0 96px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(44,95,221,.12), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 100%, rgba(0,176,214,.08), transparent 50%),
+      var(--paper);
+  }
+  .soon-inner{max-width:640px;text-align:center;margin:0 auto}
+  .soon-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px;border-radius:100px;margin-bottom:28px;
+    background:#eaf0ff;border:1px solid rgba(44,95,221,.18);
+    font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-deep);
+  }
+  .soon h1{font-size:clamp(36px,5.5vw,56px);font-weight:600;margin-bottom:18px}
+  .soon h1 em{font-style:normal;background:linear-gradient(100deg,var(--brand-blue-deep),var(--brand-blue) 45%,var(--brand-cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .soon .lead{font-size:17.5px;color:var(--ink-soft);margin:0 0 36px;line-height:1.6}
+  .soon-points{display:grid;gap:12px;text-align:left;margin:0 auto 40px;max-width:420px}
+  .soon-points li{
+    list-style:none;display:flex;gap:12px;align-items:flex-start;
+    padding:14px 16px;border-radius:14px;background:#fff;border:1px solid var(--line);
+  }
+  .soon-points .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-cyan));flex-shrink:0;margin-top:7px}
+  .soon-points strong{display:block;font-size:14.5px;font-weight:600;margin-bottom:2px}
+  .soon-points span{font-size:13.5px;color:var(--ink-soft)}
+  .soon-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .soon-note{margin-top:22px;font-size:13px;color:var(--mute)}
+  footer{border-top:1px solid var(--line-2);padding:48px 0 36px;background:var(--paper-2)}
+  .fgrid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:28px;margin-bottom:36px}
+  @media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.fgrid{grid-template-columns:1fr}}
+  .fbrand img{height:36px;width:auto;margin-bottom:12px}
+  .fbrand p{font-size:13.5px;color:var(--ink-soft);margin:0;max-width:260px}
+  .fcol h5{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 12px;font-weight:600}
+  .fcol a{display:block;font-size:13.5px;color:var(--ink-soft);padding:4px 0}
+  .fcol a:hover{color:var(--ink)}
+  .fbot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mute)}
+  .flegal{margin:16px 0 0;font-size:11.5px;color:var(--mute);line-height:1.55}
+</style>
+</head>
+<body>
+<header>
+  <div class="navbar">
+    <a href="index.html" class="brand"><img src="/logo.png" alt="SurakshaOne"><span class="brand-name">Suraksha<b>One</b></span></a>
+    <nav class="nav-links" id="navLinks">
+      <div class="has-dd" id="ddProt">
+        <a href="protection.html">Protection</a>
+        <div class="dd">
+          <a href="protection.html#d-well"><i style="background:var(--teal-deep)"></i><span>Wellness<em>Doctor on call &amp; care discounts</em></span></a>
+          <a href="protection.html#d-cyber"><i style="background:var(--blue)"></i><span>CyberSafe<em>Identity exposure &amp; scam checks</em></span></a>
+          <a href="protection.html#d-travel"><i style="background:var(--coral)"></i><span>TravelShield<em>Assistance anywhere you go</em></span></a>
+          <a href="protection.html#d-life"><i style="background:var(--brand-blue-deep)"></i><span>LifeSecure<em>Money, documents &amp; nominees</em></span></a>
+          <a href="protection.html#d-parent"><i style="background:#00b0d6"></i><span>ParentCare<em>Cover for parents living apart</em></span></a>
+        </div>
+      </div>
+      <a href="how-it-works.html">How it Works</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-login">Log in</a>
+      <a href="signup.html" class="nav-cta">Sign up</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="soon">
+    <div class="wrap">
+      <div class="soon-inner">
+        <div class="soon-badge" id="soonBadge">Member access</div>
+        <h1 id="soonTitle">Coming <em>soon</em>.</h1>
+        <p class="lead" id="soonLead">Sign up and login are almost ready. SurakshaOne runs entirely on the web — one account for consultations, exposure checks, travel help, household tools and ParentCare.</p>
+        <ul class="soon-points">
+          <li><span class="dot"></span><div><strong>Everything in the browser</strong><span>Doctor calls, scam checks and reports — from your member dashboard.</span></div></li>
+          <li><span class="dot"></span><div><strong>One household login</strong><span>Cover yourself, family and parents under a single membership.</span></div></li>
+          <li><span class="dot"></span><div><strong>Live from day one</strong><span>No waiting period once member access opens.</span></div></li>
+        </ul>
+        <div class="soon-ctas">
+          <a href="index.html#pricing" class="btn btn-p">See plans</a>
+          <a href="index.html" class="btn btn-g">Back to home</a>
+        </div>
+        <p class="soon-note" id="soonNote">Want an update when access opens? Talk to us from the home page.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand"><img src="/logo.png" alt="SurakshaOne"><p>One membership covering health and nutrition, digital safety, travel, money and your parents.</p></div>
+      <div class="fcol"><h5>Protection</h5><a href="protection.html#d-well">Wellness</a><a href="protection.html#d-cyber">CyberSafe</a><a href="protection.html#d-travel">TravelShield</a><a href="protection.html#d-life">LifeSecure</a><a href="protection.html#d-parent">ParentCare</a></div>
+      <div class="fcol"><h5>Company</h5><a href="how-it-works.html">How it works</a><a href="index.html#value">Why the bundle</a><a href="index.html#trust">Data handling</a></div>
+      <div class="fcol"><h5>Support</h5><a href="signup.html">Sign up</a><a href="login.html">Log in</a><a href="index.html#faq">FAQ</a><a href="index.html#pricing">Plans &amp; pricing</a></div>
+      <div class="fcol"><h5>Legal</h5><a href="privacy.html">Privacy</a><a href="terms.html">Terms of service</a><a href="refund.html">Refund policy</a><a href="grievance.html">Grievance redressal</a></div>
+    </div>
+    <div class="fbot"><span>© 2026 SurakshaOne. All rights reserved.</span><span>One Subscription · Complete Protection · Total Peace of Mind</span></div>
+    <p class="flegal">SurakshaOne is a subscription membership providing wellness, digital-safety, travel-assistance, elder-support and financial-readiness services. Membership benefits are service benefits delivered by SurakshaOne and its partner networks.</p>
+  </div>
+</footer>
+</body>
+</html>

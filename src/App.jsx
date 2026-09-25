@@ -3,6 +3,7 @@ import homeSource from '../surakhas one index.txt?raw'
 import howSource from '../How it works.txt?raw'
 import protectionSource from '../Protection.txt?raw'
 import employersSource from '../for exployers.txt?raw'
+import comingSoonSource from '../Coming soon.txt?raw'
 
 const pages = {
   '/': homeSource,
@@ -13,6 +14,12 @@ const pages = {
   '/protection.html': protectionSource,
   '/employers': employersSource,
   '/employers.html': employersSource,
+  '/coming-soon': comingSoonSource,
+  '/coming-soon.html': comingSoonSource,
+  '/signup': comingSoonSource,
+  '/signup.html': comingSoonSource,
+  '/login': comingSoonSource,
+  '/login.html': comingSoonSource,
 }
 
 const BASE_URL = import.meta.env.BASE_URL
@@ -20,8 +27,6 @@ const LOGO_SRC = `${BASE_URL}logo.png`
 const LOGO_MARK_SRC = `${BASE_URL}logo-mark.png`
 const FAVICON_SRC = `${BASE_URL}fav.png`
 const WHATSAPP_NUMBER = '919235777101'
-const APP_STORE_URL = '' // e.g. https://apps.apple.com/app/idXXXXXXXX
-const PLAY_STORE_URL = '' // e.g. https://play.google.com/store/apps/details?id=...
 
 function stripBase(pathname) {
   const base = BASE_URL.replace(/\/$/, '')
@@ -53,6 +58,9 @@ function normaliseMarkup(markup) {
     .replaceAll('href="how-it-works.html', `href="${withBase('/how-it-works')}`)
     .replaceAll('href="protection.html', `href="${withBase('/protection')}`)
     .replaceAll('href="employers.html', `href="${withBase('/employers')}`)
+    .replaceAll('href="coming-soon.html', `href="${withBase('/coming-soon')}`)
+    .replaceAll('href="signup.html', `href="${withBase('/signup')}`)
+    .replaceAll('href="login.html', `href="${withBase('/login')}`)
 }
 
 function rebaseImageAssets(markup) {
@@ -91,11 +99,36 @@ function addListener(target, event, callback, options, cleanups) {
   cleanups.push(() => target.removeEventListener(event, callback, options))
 }
 
-function setupInteractions(root) {
+function setupInteractions(root, path = '/') {
   const cleanups = []
   const observers = []
   const q = (selector) => root.querySelector(selector)
   const qa = (selector) => [...root.querySelectorAll(selector)]
+
+  const isSignup = path === '/signup' || path === '/signup.html'
+  const isLogin = path === '/login' || path === '/login.html'
+  if (isSignup || isLogin) {
+    const badge = q('#soonBadge')
+    const title = q('#soonTitle')
+    const lead = q('#soonLead')
+    const note = q('#soonNote')
+    if (badge) badge.textContent = isSignup ? 'Sign up' : 'Log in'
+    if (title) {
+      title.innerHTML = isSignup
+        ? 'Sign up is <em>coming soon</em>.'
+        : 'Log in is <em>coming soon</em>.'
+    }
+    if (lead) {
+      lead.textContent = isSignup
+        ? 'Member accounts are almost ready. Create your SurakshaOne account on the web — one login for consultations, exposure checks, travel help, household tools and ParentCare.'
+        : 'Member login is almost ready. Sign in on the web to your SurakshaOne dashboard — consultations, exposure checks, travel help, household tools and ParentCare in one place.'
+    }
+    if (note) {
+      note.textContent = isSignup
+        ? 'Exploring plans in the meantime? See pricing on the home page, or talk to us there.'
+        : "Already curious about what's included? Browse Protection and pricing while we finish login."
+    }
+  }
 
   const navToggle = q('#navToggle')
   const navLinks = q('#navLinks')
@@ -232,25 +265,6 @@ function setupInteractions(root) {
     )
     link.setAttribute('target', '_blank')
     link.setAttribute('rel', 'noopener noreferrer')
-  })
-
-  qa('[data-store="ios"]').forEach((link) => {
-    if (APP_STORE_URL) {
-      link.setAttribute('href', APP_STORE_URL)
-      link.setAttribute('target', '_blank')
-      link.setAttribute('rel', 'noopener noreferrer')
-    } else {
-      link.setAttribute('href', '#download')
-    }
-  })
-  qa('[data-store="android"]').forEach((link) => {
-    if (PLAY_STORE_URL) {
-      link.setAttribute('href', PLAY_STORE_URL)
-      link.setAttribute('target', '_blank')
-      link.setAttribute('rel', 'noopener noreferrer')
-    } else {
-      link.setAttribute('href', '#download')
-    }
   })
 
   const reveals = qa('.reveal')
@@ -535,7 +549,13 @@ function App() {
   const page = useMemo(() => parsePage(source), [source])
 
   useEffect(() => {
-    document.title = page.title
+    const authTitle =
+      path === '/signup' || path === '/signup.html'
+        ? 'Sign up — Coming soon | SurakshaOne'
+        : path === '/login' || path === '/login.html'
+          ? 'Log in — Coming soon | SurakshaOne'
+          : null
+    document.title = authTitle || page.title
     let description = document.querySelector('meta[name="description"]')
     if (!description) {
       description = document.createElement('meta')
@@ -560,11 +580,11 @@ function App() {
       document.head.appendChild(appleTouchIcon)
     }
     appleTouchIcon.setAttribute('href', FAVICON_SRC)
-  }, [page])
+  }, [page, path])
 
   useEffect(() => {
     const root = document.getElementById('page')
-    const cleanupInteractions = setupInteractions(root)
+    const cleanupInteractions = setupInteractions(root, path)
 
     const handleNavigation = (event) => {
       const anchor = event.target.closest('a')
