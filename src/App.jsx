@@ -39,11 +39,23 @@ const WHATSAPP_NUMBER = '919235777101'
 
 function stripBase(pathname) {
   const base = BASE_URL.replace(/\/$/, '')
-  if (base && pathname.startsWith(base)) {
-    const rest = pathname.slice(base.length)
-    return rest ? (rest.startsWith('/') ? rest : `/${rest}`) : '/'
+  let path = pathname || '/'
+  if (base && path.startsWith(base)) {
+    const rest = path.slice(base.length)
+    path = rest ? (rest.startsWith('/') ? rest : `/${rest}`) : '/'
   }
-  return pathname || '/'
+  if (path.length > 1 && path.endsWith('/')) {
+    path = path.slice(0, -1)
+  }
+  return path || '/'
+}
+
+function isMemberPath(path) {
+  return path === '/member' || path === '/member.html'
+}
+
+function isLoginPath(path) {
+  return path === '/login' || path === '/login.html'
 }
 
 function withBase(path) {
@@ -142,7 +154,7 @@ function setupInteractions(root, path = '/') {
     (event) => {
       event.preventDefault()
       const id = (q('#loginId')?.value || '').trim().toLowerCase()
-      const password = q('#loginPassword')?.value || ''
+      const password = (q('#loginPassword')?.value || '').trim()
       if (id === DEMO_USER && password === DEMO_PASSWORD) {
         sessionStorage.setItem(AUTH_KEY, '1')
         sessionStorage.setItem(AUTH_NAME_KEY, 'Demo Member')
@@ -592,8 +604,8 @@ function App() {
   const page = useMemo(() => parsePage(source), [source])
 
   useEffect(() => {
-    const memberPaths = path === '/member' || path === '/member.html'
-    const loginPaths = path === '/login' || path === '/login.html'
+    const memberPaths = isMemberPath(path)
+    const loginPaths = isLoginPath(path)
     const authed = sessionStorage.getItem(AUTH_KEY) === '1'
     if (memberPaths && !authed) {
       window.location.replace(withBase('/login'))
@@ -608,9 +620,9 @@ function App() {
     const authTitle =
       path === '/signup' || path === '/signup.html'
         ? 'Sign up — Coming soon | SurakshaOne'
-        : path === '/login' || path === '/login.html'
+        : isLoginPath(path)
           ? 'Log in | SurakshaOne'
-          : path === '/member' || path === '/member.html'
+          : isMemberPath(path)
             ? 'Member home | SurakshaOne'
             : null
     document.title = authTitle || page.title

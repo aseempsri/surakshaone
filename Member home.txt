@@ -120,8 +120,8 @@
             <li><span class="dot"></span><div><strong>Paid offers sit behind the free report</strong>Nomination Fix ₹2,500 · Adrika Will ₹9,500 / ₹18,000 · Claim Assist ₹25,000 + 10% on recovered dormant assets.</div></li>
           </ul>
           <div class="btn-row">
-            <a class="btn btn-p" href="/member/family-protection-report.html">Start Family Protection Report</a>
-            <a class="btn btn-g" href="/member/family-protection-report.html?view=plans">See offer stack</a>
+            <a class="btn btn-p" href="/lifesecure/family-protection-report.html">Start Family Protection Report</a>
+            <a class="btn btn-g" href="/lifesecure/family-protection-report.html?view=plans">See offer stack</a>
           </div>
           <p class="rule">Architectural rule from the build spec: capture institution + nominee status. Never capture account numbers, policy numbers, PAN, balances or uploaded documents.</p>
         </div>
